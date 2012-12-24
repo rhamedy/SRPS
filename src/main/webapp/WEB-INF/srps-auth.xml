@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" 
-	   xmlns:security="http://www.springframework.org/schema/security"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-       http://www.springframework.org/schema/security
-       http://www.springframework.org/schema/security/spring-security-3.0.xsd
-      ">
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-  <security:http auto-config="true" use-expressions="true">
-  	 <security:intercept-url pattern="/**" access="hasRole('admin')" />
-  	 <security:intercept-url pattern="/resources/static/login.html" filters="none"/>
-  	 <security:intercept-url pattern="/resources/static/home.html" filters="none"/>
-  	 <security:intercept-url pattern="/resources/css/*" filters="none"/>
-  	 <security:intercept-url pattern="/resources/js/*" filters="none"/>
-  	 <security:intercept-url pattern="/resources/images/*" filters="none"/>
-  	 <security:intercept-url pattern="/job/all/*" filters="none"/>
-  	  
-	 <security:form-login login-page ="/resources/static/login.html"
-						  authentication-failure-url="/resources/login.html"/>	 
-	<security:logout logout-url="/logout"
-					 logout-success-url="/resources/static/login.html"/>
-  </security:http>
-  
-  
-  <security:authentication-manager alias="authenticationManager">
-    <security:authentication-provider> 
-      <!-- <security:password-encoder hash="md5" />  -->
-      <security:jdbc-user-service id="userService" data-source-ref="dataSource" 
-        users-by-username-query="select username, password, true from authentication.user where username=?"
-        authorities-by-username-query="
+
+	<http pattern="/mobile/**" use-expressions="true" create-session="stateless" realm="srps"
+		authentication-manager-ref="authenticationManager">
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<http-basic />
+	</http>
+
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/resources/html/login.html*"
+			access="none" />
+		<intercept-url pattern="/resources/html/loginError.html*"
+			access="none" />
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<form-login login-page="/resources/html/login.html"
+			default-target-url="/home" authentication-failure-url="/resources/html/loginError.html" />	
+	</http>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider>
+			<!-- <security:password-encoder hash="md5" /> -->
+			<jdbc-user-service id="userService"
+				data-source-ref="dataSource"
+				users-by-username-query="select username, password, true from authentication.user where username=?"
+				authorities-by-username-query="
                 select u.username, r.role_name 
                 from authentication.user u, authentication.role r, authentication.user_role ur  
-                where u.username=? and u.username = ur.username and ur.role_id=r.role_id"
-      />
-    </security:authentication-provider>
-  </security:authentication-manager>
+                where u.username=? and u.username = ur.username and ur.role_id=r.role_id" />
+		</authentication-provider>
+	</authentication-manager>
 
-</beans>
+</beans:beans>

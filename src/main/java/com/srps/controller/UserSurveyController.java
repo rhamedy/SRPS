@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.srps.util.FormUtil;
@@ -32,5 +33,18 @@ public class UserSurveyController {
 		response.setContentType("text/xml"); 
 		response.getOutputStream().print(formList); 
 		response.flushBuffer(); 
+	}
+	
+	@RequestMapping(value="/upload", method=RequestMethod.GET)
+	public ModelAndView upload() { 
+		ModelAndView mav = new ModelAndView(); 
+		mav.setViewName("upload"); 
+		
+		return mav; 
+	}
+	
+	@RequestMapping(value="/upload", method=RequestMethod.POST)
+	public void upload(MultipartResolver[] files) { 
+		System.out.println("files.length = " + files.length); 
 	}
 }

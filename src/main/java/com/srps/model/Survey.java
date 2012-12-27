@@ -1,5 +1,8 @@
 package com.srps.model;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class Survey {
 
 	private String formId; 

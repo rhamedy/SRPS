@@ -3,6 +3,9 @@ package com.srps.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
@@ -21,13 +24,12 @@ import com.srps.dao.SurveyDao;
 
 
 @Repository
-public class SurveyService {
+public class SurveyServices {
 	
 	@Autowired 
 	private SurveyDao surveyDao; 
 	
-	public int validateXml(MultipartFile file) { 
-		
+	public int validateXml(MultipartFile file) throws MalformedURLException { 
 		try { 
 			FileOutputStream fos = new FileOutputStream("/home/fareen/workspace/forms/temp_file.xml"); 
 			fos.write(file.getBytes());
@@ -36,12 +38,11 @@ public class SurveyService {
 			ex.printStackTrace();
 		}
 		
-		File schemaFile = new File("/home/fareen/workspace/forms/web-app_2_4.xsd"); 
 		Source xmlFile = new StreamSource(new File("/home/fareen/workspace/forms/temp_file.xml")); 
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
 		Schema schema = null; 
 		try{ 
-			schema = schemaFactory.newSchema(schemaFile); 
+			schema = schemaFactory.newSchema(new URL("http://java.sun.com/xml/ns/j2ee/web-app_2_4.xml")); 
 		} catch(SAXException sax) {
 			sax.printStackTrace();
 			return 1; 
@@ -58,6 +59,10 @@ public class SurveyService {
 		}
 		
 		return 0; 
+	}
+	
+	public List<String> getFormsByUsername(String username) { 
+		return surveyDao.retrieveFormsByUsername(username); 
 	}
 	
 	public MultipartFile getXmlFile(Map<String, MultipartFile> files) { 
@@ -80,15 +85,12 @@ public class SurveyService {
 	
 	public void storeBlankForm(int formId, String filename, String username) { 
 		surveyDao.storeBlankForm(formId, filename); 
-		
-		if(!username.equals("everyone")) { 
-			surveyDao.relateFormToUser(formId, username); 
-		} 
+		surveyDao.relateFormToUser(formId, username); 
 	}
 	
-	public void storeXmlFileInDisc(MultipartFile file) { 
+	public void storeBlankFormInDisc(MultipartFile file, String filename) { 
 		try {
-			FileOutputStream fos = new FileOutputStream("/home/fareen/workspace/forms/temp_file.xml"); 
+			FileOutputStream fos = new FileOutputStream("/home/fareen/workspace/forms/" + filename); 
 			fos.write(file.getBytes());
 			fos.close(); 
 		} catch(IOException ex) { 

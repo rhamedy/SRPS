@@ -1,9 +1,14 @@
 package com.srps.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -19,6 +24,20 @@ public class SurveyDao {
 	public int getNextFormId() { 
 		String SQL = "SELECT COUNT(*) from survey.blank_form"; 
 		return jdbcTemplate.queryForInt(SQL); 
+	}
+	
+	public List<String> retrieveFormsByUsername(String username) { 
+		String SQL = "SELECT form_name from survey.blank_form f, survey.form_user fu" +
+				" where (fu.username = ? OR fu.username = ?) and fu.form_id = f.form_id "; 
+		
+		List<String> formNames = jdbcTemplate.query(SQL, new Object[]{username, "everyone"}, 
+				new RowMapper<String>() {
+				public String mapRow(ResultSet rs, int rowNum) throws SQLException { 
+					return rs.getString("form_name"); 
+				} 
+		});
+		
+		return formNames; 
 	}
 	
 	public boolean storeBlankForm(int formId, String filename) { 

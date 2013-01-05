@@ -22,78 +22,107 @@ import org.xml.sax.SAXException;
 
 import com.srps.dao.SurveyDao;
 
-
 @Repository
 public class SurveyServices {
-	
-	@Autowired 
-	private SurveyDao surveyDao; 
-	
-	public int validateXml(MultipartFile file) throws MalformedURLException { 
-		try { 
-			FileOutputStream fos = new FileOutputStream("/home/fareen/workspace/forms/temp_file.xml"); 
+
+	@Autowired
+	private SurveyDao surveyDao;
+
+	public int validateXml(MultipartFile file) throws MalformedURLException {
+		try {
+			FileOutputStream fos = new FileOutputStream(
+					"/home/fareen/workspace/forms/temp_file.xml");
 			fos.write(file.getBytes());
-			fos.close(); 
-		} catch(IOException ex) { 
+			fos.close();
+		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		
-		Source xmlFile = new StreamSource(new File("/home/fareen/workspace/forms/temp_file.xml")); 
-		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
-		Schema schema = null; 
-		try{ 
-			schema = schemaFactory.newSchema(new URL("http://java.sun.com/xml/ns/j2ee/web-app_2_4.xml")); 
-		} catch(SAXException sax) {
+
+		Source xmlFile = new StreamSource(new File(
+				"/home/fareen/workspace/forms/temp_file.xml"));
+		SchemaFactory schemaFactory = SchemaFactory
+				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		Schema schema = null;
+		try {
+			schema = schemaFactory.newSchema(new URL(
+					"http://java.sun.com/xml/ns/j2ee/web-app_2_4.xml"));
+		} catch (SAXException sax) {
 			sax.printStackTrace();
-			return 1; 
+			return 1;
 		}
-		
-		try { 
-			Validator validator = schema.newValidator(); 
+
+		try {
+			Validator validator = schema.newValidator();
 			validator.validate(xmlFile);
-		} catch(SAXException sax) { 
-			sax.printStackTrace(); 
-			return -1; 
-		} catch(IOException ex) { 
-			return 1; 
+		} catch (SAXException sax) {
+			sax.printStackTrace();
+			return -1;
+		} catch (IOException ex) {
+			return 1;
 		}
-		
-		return 0; 
+
+		return 0;
 	}
-	
-	public List<String> getFormsByUsername(String username) { 
-		return surveyDao.retrieveFormsByUsername(username); 
+
+	public List<String> getFormsByUsername(String username) {
+		return surveyDao.retrieveFormsByUsername(username);
 	}
-	
-	public MultipartFile getXmlFile(Map<String, MultipartFile> files) { 
-		for(Map.Entry<String, MultipartFile> entry: files.entrySet()) { 
-			MultipartFile temp = entry.getValue(); 
-			if(temp.getOriginalFilename().endsWith(".xml")) { 
-				return temp; 
+
+	public MultipartFile getXmlFile(Map<String, MultipartFile> files) {
+		for (Map.Entry<String, MultipartFile> entry : files.entrySet()) {
+			MultipartFile temp = entry.getValue();
+			if (temp.getOriginalFilename().endsWith(".xml")) {
+				return temp;
 			}
 		}
 		return null;
 	}
-	
-	public void processXmlFile(MultipartFile file) { 
-		
+
+	public void createSubmissionDirectoryInDisk(String submissionId) {
+		File dir = new File("/home/fareen/workspace/submissions", submissionId);
+		dir.mkdir();
 	}
-	
-	public int getNextFormId() { 
-		return surveyDao.getNextFormId(); 
-	}
-	
-	public void storeBlankForm(int formId, String filename, String username) { 
-		surveyDao.storeBlankForm(formId, filename); 
-		surveyDao.relateFormToUser(formId, username); 
-	}
-	
-	public void storeBlankFormInDisc(MultipartFile file, String filename) { 
+
+	public boolean saveSubmissionContentToDisk(
+			Map<String, MultipartFile> files, String submissionId) {
+
+		File file = null;
+
 		try {
-			FileOutputStream fos = new FileOutputStream("/home/fareen/workspace/forms/" + filename); 
+			for (Map.Entry<String, MultipartFile> entry : files.entrySet()) {
+				MultipartFile f = entry.getValue();
+				file = new File("/home/fareen/workspace/submissions/" + submissionId,
+						f.getOriginalFilename());
+				f.transferTo(file);
+				file.createNewFile();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public void processXmlFile(MultipartFile file) {
+
+	}
+
+	public int getNextFormId() {
+		return surveyDao.getNextFormId();
+	}
+
+	public void storeBlankForm(int formId, String filename, String username) {
+		surveyDao.storeBlankForm(formId, filename);
+		surveyDao.relateFormToUser(formId, username);
+	}
+
+	public void storeBlankFormInDisc(MultipartFile file, String filename) {
+		try {
+			FileOutputStream fos = new FileOutputStream(
+					"/home/fareen/workspace/forms/" + filename);
 			fos.write(file.getBytes());
-			fos.close(); 
-		} catch(IOException ex) { 
+			fos.close();
+		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 	}

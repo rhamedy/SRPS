@@ -1,6 +1,7 @@
 package com.srps.util;
 
 import java.util.List;
+import java.util.UUID;
 
 public class FormUtil {
 
@@ -54,5 +55,10 @@ public class FormUtil {
 			}
 		}
 		return modifiedFilename.toString();
+	}
+	
+	public static String generateSubmissionId() { 
+		UUID uuid = UUID.randomUUID(); 
+		return uuid.toString(); 
 	}
 }

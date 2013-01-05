@@ -91,9 +91,10 @@ public class UserSurveyController {
 			throws IOException {
 
 		response.setContentType("application/octet-stream");
-		response.setHeader("Content-Disposation", "attachment;filename=" + formName);
-		
-		System.out.println("formName : " + formName); 
+		response.setHeader("Content-Disposation", "attachment;filename="
+				+ formName);
+
+		System.out.println("formName : " + formName);
 
 		File file = new File("/home/fareen/workspace/forms/" + formName);
 		FileInputStream fin = new FileInputStream(file);
@@ -108,5 +109,21 @@ public class UserSurveyController {
 		fin.close();
 		out.flush();
 		out.close();
+	}
+
+	@RequestMapping(value = "/mobile/submission", method = RequestMethod.POST)
+	public void formSubmission(MultipartHttpServletRequest request, HttpServletResponse response) {
+		String submissionId = FormUtil.generateSubmissionId();
+		surveyServices.createSubmissionDirectoryInDisk(submissionId);
+
+		boolean saveStatus = surveyServices.saveSubmissionContentToDisk(
+				request.getFileMap(), submissionId);
+		
+		if (saveStatus) {
+			response.setStatus(201); 
+		} else {
+			response.setStatus(500); 
+		}
+
 	}
 }

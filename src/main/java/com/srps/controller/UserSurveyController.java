@@ -113,11 +113,18 @@ public class UserSurveyController {
 
 	@RequestMapping(value = "/mobile/submission", method = RequestMethod.POST)
 	public void formSubmission(MultipartHttpServletRequest request, HttpServletResponse response) {
+		
 		String submissionId = FormUtil.generateSubmissionId();
+		String username = userServices.getCurrentUsername(); 
+				
 		surveyServices.createSubmissionDirectoryInDisk(submissionId);
 
 		boolean saveStatus = surveyServices.saveSubmissionContentToDisk(
 				request.getFileMap(), submissionId);
+		
+		MultipartFile xmlFile = surveyServices.getXmlFile(request.getFileMap()); 
+		
+		saveStatus = surveyServices.processXmlFile(xmlFile, submissionId, username); 
 		
 		if (saveStatus) {
 			response.setStatus(201); 

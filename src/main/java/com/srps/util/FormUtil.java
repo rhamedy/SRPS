@@ -3,6 +3,10 @@ package com.srps.util;
 import java.util.List;
 import java.util.UUID;
 
+import org.jdom2.Element;
+
+import com.srps.model.Survey;
+
 public class FormUtil {
 
 	// used for testing purpose
@@ -56,9 +60,57 @@ public class FormUtil {
 		}
 		return modifiedFilename.toString();
 	}
-	
-	public static String generateSubmissionId() { 
-		UUID uuid = UUID.randomUUID(); 
-		return uuid.toString(); 
+
+	public static String generateSubmissionId() {
+		UUID uuid = UUID.randomUUID();
+		return uuid.toString();
+	}
+
+	public static Survey populateObject(Survey survey, List<Element> elements) {
+		boolean image = true;
+		boolean audio = true;
+		boolean location = true;
+		boolean visibility = true;
+		boolean deviceId = true;
+
+		for (Element e : elements) {
+			if (image && e.getName().equals("Image")) {
+				survey.setImage(true);
+				image = false;
+				continue;
+			}
+
+			if (audio && e.getName().equals("Audio")) {
+				survey.setAudio(true);
+				audio = false;
+				continue;
+			}
+
+			if (location && e.getName().equals("Location")) {
+				survey.setGeopoint(true);
+				location = false;
+				continue;
+			}
+
+			if (deviceId && e.getName().equals("DeviceId")) {
+				survey.setDeviceId(e.getValue());
+				deviceId = false;
+				continue;
+			}
+
+			if (visibility && e.getName().equals("Visibility")) {
+				if (e.getValue().equals("no")) {
+					survey.setVisibility(false);
+				}
+				visibility = true;
+				continue;
+			}
+
+			if (location && audio && image && visibility && deviceId) {
+				break;
+			}
+		}
+
+		return survey;
 	}
 }

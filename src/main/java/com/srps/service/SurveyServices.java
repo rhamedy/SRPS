@@ -164,4 +164,8 @@ public class SurveyServices {
 			ex.printStackTrace();
 		}
 	}
+	
+	public List<Survey> getPublicSubmissions() { 
+		return surveyDao.getPublicSubmissions(); 
+	}
 }

@@ -90,4 +90,27 @@ public class SurveyDao {
 			return false;
 		}
 	}
+	
+	public List<Survey> getPublicSubmissions() { 
+		String SQL = "SELECT * FROM survey.submissions WHERE private = FALSE"; 
+		
+		List<Survey> surveys = jdbcTemplate.query(SQL, new RowMapper<Survey>() { 
+			public Survey mapRow(ResultSet rs, int rowNum) throws SQLException { 
+				Survey temp = new Survey(); 
+				
+				temp.setSubmissionId(rs.getString("id")); 
+				temp.setAudio(rs.getBoolean("has_audio")); 
+				temp.setImage(rs.getBoolean("has_image")); 
+				temp.setGeopoint(rs.getBoolean("has_geopoint")); 
+				temp.setSubmissionDate(rs.getTimestamp("submission_date"));
+				temp.setVisibility(rs.getBoolean("private")); 
+				temp.setFormName(rs.getString("form_name")); 
+				temp.setUsername(rs.getString("username")); 
+				
+				return temp;
+			}
+		}); 
+		
+		return surveys; 
+	}
 }

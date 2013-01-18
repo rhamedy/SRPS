@@ -9,6 +9,7 @@
 
 	<http pattern="/resources/html/login.html*" security="none" />
 	<http pattern="/resources/html/loginError.html*" security="none" />
+	<http pattern="/public/home" security="none" />
 
 	<http pattern="/mobile/**" use-expressions="true" create-session="stateless"
 		realm="srps" authentication-manager-ref="authenticationManager">

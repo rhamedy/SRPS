@@ -37,13 +37,13 @@ public class UserSurveyController {
 
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
-		
+
 		return mav;
 	}
 
 	@RequestMapping(value = "/mobile/formList")
 	public void getFormList(HttpServletResponse response) throws IOException {
-		
+
 		String username = userServices.getCurrentUsername();
 		List<String> formList = surveyServices.getFormsByUsername(username);
 
@@ -82,27 +82,29 @@ public class UserSurveyController {
 	}
 
 	@RequestMapping(value = "/mobile/submission", method = RequestMethod.POST)
-	public void formSubmission(MultipartHttpServletRequest request, HttpServletResponse response) {
-		
+	public void formSubmission(MultipartHttpServletRequest request,
+			HttpServletResponse response) {
+
 		String submissionId = FormUtil.generateSubmissionId();
-		String username = userServices.getCurrentUsername(); 
-				
+		String username = userServices.getCurrentUsername();
+
 		surveyServices.createSubmissionDirectoryInDisk(submissionId);
 
 		boolean saveStatus = surveyServices.saveSubmissionContentToDisk(
 				request.getFileMap(), submissionId);
-		
-		MultipartFile xmlFile = surveyServices.getXmlFile(request.getFileMap()); 
-		
-		saveStatus = surveyServices.processXmlFile(xmlFile, submissionId, username); 
-		
+
+		MultipartFile xmlFile = surveyServices.getXmlFile(request.getFileMap());
+
+		saveStatus = surveyServices.processXmlFile(xmlFile, submissionId,
+				username);
+
 		if (saveStatus) {
-			response.setStatus(201); 
+			response.setStatus(201);
 		} else {
-			response.setStatus(500); 
+			response.setStatus(500);
 		}
 	}
-	
+
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
 	public ModelAndView upload() {
 		ModelAndView mav = new ModelAndView();
@@ -131,17 +133,26 @@ public class UserSurveyController {
 			surveyServices.storeBlankFormInDisc(xmlFile, filename);
 		}
 	}
-	
+
 	@RequestMapping(value = "/public/home", method = RequestMethod.GET)
-	public ModelAndView showHomepage() { 
+	public ModelAndView showHomepage() {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("public"); 
-		
-		List<Survey> submissions = surveyServices.getPublicSubmissions(); 
-		
-		mav.addObject("submissions", submissions); 
-		
-		return mav; 
-		
+		mav.setViewName("public");
+
+		List<Survey> submissions = surveyServices.getPublicSubmissions();
+
+		mav.addObject("submissions", submissions);
+
+		return mav;
+
+	}
+
+	@RequestMapping(value = "/public/account", method = RequestMethod.POST)
+	public void newAccount(@RequestParam(required = true) String firstName,
+			@RequestParam(required = true) String lastName, @RequestParam(required = true) String email,
+			HttpServletResponse response) {
+
+		response.setStatus(200);
+
 	}
 }

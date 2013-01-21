@@ -26,14 +26,14 @@
 
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider>
-			<!-- <security:password-encoder hash="md5" /> -->
 			<jdbc-user-service id="userService"
 				data-source-ref="dataSource"
-				users-by-username-query="select username, password, true from authentication.user where username=?"
+				users-by-username-query="SELECT username, password, true FROM authentication.user 
+				WHERE username=? AND disabled = FALSE"
 				authorities-by-username-query="
-                select u.username, r.role_name 
+                SELECT u.username, r.role_name 
                 from authentication.user u, authentication.role r, authentication.user_role ur  
-                where u.username=? and u.username = ur.username and ur.role_id=r.role_id" />
+                where u.username=? and u.username = ur.username and ur.role_id=r.role_id and u.disabled = FALSE" />
 		</authentication-provider>
 	</authentication-manager>
 

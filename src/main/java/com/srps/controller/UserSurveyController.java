@@ -19,9 +19,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.srps.model.Survey;
+import com.srps.model.User;
 import com.srps.service.SurveyServices;
 import com.srps.service.UserServices;
 import com.srps.util.FormUtil;
+import com.srps.util.MailClient;
 
 @Controller
 public class UserSurveyController {
@@ -152,7 +154,26 @@ public class UserSurveyController {
 			@RequestParam(required = true) String lastName, @RequestParam(required = true) String email,
 			HttpServletResponse response) {
 
-		response.setStatus(200);
+		User user; 
+		
+		if(!userServices.isUsernameUsed(email)) {
+			
+			user = new User(); 
+			
+			user.setFirstName(firstName); 
+			user.setLastName(lastName); 
+			user.setEmail(email);
+			
+			userServices.addAccountRequest(user); 
+			userServices.sendConfirmationEmail(user); 
+			
+			response.setHeader("Msg", "Account request sent. You will receive a confirmation email once its created."); 
+			response.setStatus(200);
+		} else { 
+			response.setHeader("Msg", "Username is use. Choose a different one."); 
+			response.setStatus(302); 
+		}
+		
 
 	}
 }

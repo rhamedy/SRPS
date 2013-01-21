@@ -2,15 +2,29 @@ package com.srps.model;
 
 public class User {
 
-	private String fullName; 
+	private String firstName;
+	private String lastName; 
 	private String dateOfBirth; 
 	private String email;
+	private String password; 
 	
-	public String getFullName() {
-		return fullName;
+	public String getPassword() {
+		return password;
 	}
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	public String getDateOfBirth() {
 		return dateOfBirth;

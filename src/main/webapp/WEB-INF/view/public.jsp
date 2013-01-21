@@ -73,8 +73,14 @@
   				}
 				request.onreadystatechange=function(){
   					if (request.readyState==4 && request.status==200){
-    					//document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-    					alert("success!"); 
+    					document.getElementById("accountStatus").innerHTML = request.getResponseHeader("Msg"); 
+    					document.getElementById("accountStatus").style.color = "green"; 
+    					document.getElementById("firstName").value = ""; 
+    					document.getElementById("lastName").value = ""; 
+    					document.getElementById("email").value = "";
+    				} else if(request.readyState==4 && request.status==302) { 
+    					document.getElementById("accountStatus").innerHTML = request.getResponseHeader("Msg"); 
+    					document.getElementById("accountStatus").style.color = "red"; 
     				}
  				}
 				request.open("POST","/SRPS/public/account",true);
@@ -132,6 +138,7 @@
 				
 				<label for="email"> Email </label>
 				<input type="text" name="email" id="email"></input><br />
+				<p id="accountStatus"></p>
 				
 				<button type="button" onclick="javascript:validateUserInput()"> Submit </button>
 			</div>

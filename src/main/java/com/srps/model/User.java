@@ -1,13 +1,22 @@
 package com.srps.model;
 
+import java.sql.Date;
+
 public class User {
 
 	private String firstName;
 	private String lastName; 
-	private String dateOfBirth; 
+	private Date dateOfBirth; 
 	private String email;
 	private String password; 
+	private boolean disabled; 
 	
+	public boolean isDisabled() {
+		return disabled;
+	}
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
 	public String getPassword() {
 		return password;
 	}
@@ -26,10 +35,10 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 	public String getEmail() {

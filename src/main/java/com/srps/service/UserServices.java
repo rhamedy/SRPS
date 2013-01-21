@@ -16,8 +16,8 @@ public class UserServices {
 	@Autowired
 	private UserDao userDao;
 
-	public List<String> retrieveAllUsers() {
-		return userDao.retrieveAllUsers();
+	public List<String> retrieveUsernames() {
+		return userDao.retrieveUsernames();
 	}
 
 	public String getCurrentUsername() {
@@ -44,5 +44,17 @@ public class UserServices {
 				+ "\n\n SRPS Team";
 
 		MailClient.sendEmail(user.getEmail(), password, subject, text);
+	}
+	
+	public boolean isAdmin(String username) { 
+		return userDao.isAdmin(username); 
+	}
+	
+	public User getUserByUsername(String username) { 
+		return userDao.getUserByUsername(username); 
+	}
+	
+	public List<User> retrieveUsers() { 
+		return userDao.retrieveUsers(); 
 	}
 }

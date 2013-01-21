@@ -23,7 +23,7 @@ public class UserDao {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public List<String> retrieveAllUsers() {
+	public List<String> retrieveUsernames() {
 		String SQL = "SELECT username FROM authentication.user";
 
 		List<String> users = jdbcTemplate.query(SQL, new RowMapper<String>() {
@@ -57,5 +57,51 @@ public class UserDao {
 		String SQL = "SELECT password FROM authentication.user where username = ?"; 
 		
 		return jdbcTemplate.queryForObject(SQL, new Object[]{username}, String.class);
+	}
+	
+	public boolean isAdmin(String username) { 
+		String SQL = "SELECT count(*) FROM authentication.user u, authentication.role r, " +
+				"authentication.user_role ur WHERE u.username = ? AND u.username = ur.username " +
+				"AND ur.role_id = r.role_id AND r.role_name = ?"; 
+		
+		int count = jdbcTemplate.queryForInt(SQL, new Object[]{username, "Admin"}); 
+		
+		return (count == 0)? false: true; 
+	}
+	
+	public User getUserByUsername(String username) { 
+		String SQL = "SELECT * FROM authentication.user WHERE username = ?";
+		
+		return jdbcTemplate.queryForObject(SQL, new Object[]{username}, new RowMapper<User>(){
+			public User mapRow(ResultSet rs, int rowNum) throws SQLException { 
+				User user = new User(); 
+				user.setDateOfBirth(rs.getDate("dob")); 
+				user.setDisabled(rs.getBoolean("disabled")); 
+				user.setEmail(rs.getString("username")); 
+				user.setFirstName(rs.getString("first_name")); 
+				user.setLastName(rs.getString("last_name"));
+				
+				return user; 
+			}
+		}); 
+	}
+	
+	public List<User> retrieveUsers() { 
+		String SQL = "SELECT * FROM authentication.user";
+		
+		List<User> users = jdbcTemplate.query(SQL, new RowMapper<User>() {
+			public User mapRow(ResultSet rs, int rowNum) throws SQLException { 
+				User user = new User(); 
+				user.setDateOfBirth(rs.getDate("dob"));
+				user.setDisabled(rs.getBoolean("disabled")); 
+				user.setEmail(rs.getString("username")); 
+				user.setFirstName(rs.getString("first_name")); 
+				user.setLastName(rs.getString("last_name")); 
+				
+				return user; 
+			}
+		}); 
+		
+		return users; 
 	}
 }

@@ -165,7 +165,7 @@ public class SurveyServices {
 		}
 	}
 	
-	public List<Survey> getPublicSubmissions() { 
-		return surveyDao.getPublicSubmissions(); 
+	public List<Survey> getSubmissions(String username, int flag) { 
+		return surveyDao.getSubmissions(username, flag); 
 	}
 }

@@ -91,8 +91,15 @@ public class SurveyDao {
 		}
 	}
 	
-	public List<Survey> getPublicSubmissions() { 
-		String SQL = "SELECT * FROM survey.submissions WHERE private = FALSE"; 
+	public List<Survey> getSubmissions(String username, int flag) { 
+		String SQL = ""; 
+		
+		switch(flag) { 
+			case 1: SQL = "SELECT * FROM survey.submissions WHERE private = FALSE"; 
+				break; 
+			case 2: SQL = "SELECT * FROM survey.submissions WHERE username = '" + username + "'"; 
+				break; 
+		}
 		
 		List<Survey> surveys = jdbcTemplate.query(SQL, new RowMapper<Survey>() { 
 			public Survey mapRow(ResultSet rs, int rowNum) throws SQLException { 

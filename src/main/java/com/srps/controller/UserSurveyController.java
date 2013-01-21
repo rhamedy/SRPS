@@ -23,7 +23,6 @@ import com.srps.model.User;
 import com.srps.service.SurveyServices;
 import com.srps.service.UserServices;
 import com.srps.util.FormUtil;
-import com.srps.util.MailClient;
 
 @Controller
 public class UserSurveyController {
@@ -38,8 +37,26 @@ public class UserSurveyController {
 	public ModelAndView home() {
 
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("index");
 
+		String username = userServices.getCurrentUsername();
+		boolean bool = userServices.isAdmin(username);
+
+		User user = userServices.getUserByUsername(username);
+
+		if (bool) {
+			mav.setViewName("admin");
+			List<User> users = userServices.retrieveUsers();
+
+			mav.addObject("users", users);
+		} else {
+			mav.setViewName("user");
+			List<Survey> submissions = surveyServices.getSubmissions(username,
+					2);
+
+			mav.addObject("submissions", submissions);
+		}
+
+		mav.addObject("user", user);
 		return mav;
 	}
 
@@ -112,7 +129,7 @@ public class UserSurveyController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("upload");
 
-		List<String> allUsers = userServices.retrieveAllUsers();
+		List<String> allUsers = userServices.retrieveUsernames();
 		mav.addObject("users", allUsers);
 
 		return mav;
@@ -141,7 +158,8 @@ public class UserSurveyController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("public");
 
-		List<Survey> submissions = surveyServices.getPublicSubmissions();
+		// all the submissions which is public, differentiated by value 1
+		List<Survey> submissions = surveyServices.getSubmissions("", 1);
 
 		mav.addObject("submissions", submissions);
 
@@ -151,29 +169,30 @@ public class UserSurveyController {
 
 	@RequestMapping(value = "/public/account", method = RequestMethod.POST)
 	public void newAccount(@RequestParam(required = true) String firstName,
-			@RequestParam(required = true) String lastName, @RequestParam(required = true) String email,
+			@RequestParam(required = true) String lastName,
+			@RequestParam(required = true) String email,
 			HttpServletResponse response) {
 
-		User user; 
-		
-		if(!userServices.isUsernameUsed(email)) {
-			
-			user = new User(); 
-			
-			user.setFirstName(firstName); 
-			user.setLastName(lastName); 
+		User user;
+
+		if (!userServices.isUsernameUsed(email)) {
+
+			user = new User();
+
+			user.setFirstName(firstName);
+			user.setLastName(lastName);
 			user.setEmail(email);
-			
-			userServices.addAccountRequest(user); 
-			userServices.sendConfirmationEmail(user); 
-			
-			response.setHeader("Msg", "Account request sent. You will receive a confirmation email once its created."); 
+
+			userServices.addAccountRequest(user);
+			userServices.sendConfirmationEmail(user);
+
+			response.setHeader("Msg", "Account request sent successfully.");
 			response.setStatus(200);
-		} else { 
-			response.setHeader("Msg", "Username is use. Choose a different one."); 
-			response.setStatus(302); 
+		} else {
+			response.setHeader("Msg",
+					"Username is use. Choose a different one.");
+			response.setStatus(302);
 		}
-		
 
 	}
 }

@@ -2,16 +2,20 @@ package com.srps.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.srps.model.Survey;
+import com.srps.util.CustomMap;
 
 @Repository
 public class SurveyDao {
@@ -28,7 +32,7 @@ public class SurveyDao {
 		return jdbcTemplate.queryForInt(SQL);
 	}
 
-	public List<String> retrieveFormsByUsername(String username) {
+	public List<String> retrieveFormNamesByUsername(String username) {
 		String SQL = "SELECT form_name from survey.blank_form f, survey.form_user fu"
 				+ " where (fu.username = ? OR fu.username = ?) and fu.form_id = f.form_id ";
 
@@ -99,6 +103,7 @@ public class SurveyDao {
 				break; 
 			case 2: SQL = "SELECT * FROM survey.submissions WHERE username = '" + username + "'"; 
 				break; 
+			case 3: SQL = "SELECT * FROM survey.submissions"; 
 		}
 		
 		List<Survey> surveys = jdbcTemplate.query(SQL, new RowMapper<Survey>() { 
@@ -120,4 +125,38 @@ public class SurveyDao {
 		
 		return surveys; 
 	}
+	
+	public List<CustomMap> getFormsByUsername(String username) { 
+		String SQL = "SELECT f.form_id, f.form_name FROM survey.blank_form f, survey.form_user fu" +
+				" WHERE f.form_id = fu.form_id AND fu.username = ?";
+		
+		List<CustomMap> customMap = jdbcTemplate.query(SQL, new Object[]{username}, new RowMapper<CustomMap>(){
+			public CustomMap mapRow(ResultSet rs, int rowNum) throws SQLException { 
+				CustomMap m = new CustomMap(); 
+				m.setKey(rs.getInt("form_id")); 
+				m.setValue(rs.getString("form_name")); 
+				
+				return m; 
+			}
+		}); 
+		
+		return customMap; 
+	}
+	
+	public List<CustomMap> getAllForms() { 
+		String SQL = "SELECT form_id, form_name FROM survey.blank_form";
+		
+		List<CustomMap> forms = jdbcTemplate.query(SQL, new RowMapper<CustomMap>(){
+			public CustomMap mapRow(ResultSet rs, int rowNum) throws SQLException { 
+				CustomMap m = new CustomMap(); 
+				m.setKey(rs.getString("form_id")); 
+				m.setValue(rs.getString("form_name")); 
+				
+				return m; 
+			}
+		}); 
+		
+		return forms; 
+	}
 }
+

@@ -57,4 +57,8 @@ public class UserServices {
 	public List<User> retrieveUsers() { 
 		return userDao.retrieveUsers(); 
 	}
+	
+	public void updateUser(User user) { 
+		userDao.updateUser(user);
+	}
 }

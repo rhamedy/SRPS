@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +25,7 @@ import com.srps.model.Survey;
 import com.srps.model.User;
 import com.srps.service.SurveyServices;
 import com.srps.service.UserServices;
+import com.srps.util.CustomMap;
 import com.srps.util.FormUtil;
 
 @Controller
@@ -46,14 +50,20 @@ public class UserSurveyController {
 		if (bool) {
 			mav.setViewName("admin");
 			List<User> users = userServices.retrieveUsers();
-
+			List<CustomMap> forms = surveyServices.getAllForms(); 
+			List<Survey> submissions = surveyServices.getSubmissions("", 3);
+			
 			mav.addObject("users", users);
+			mav.addObject("forms", forms); 
+			mav.addObject("submissions", submissions);
 		} else {
 			mav.setViewName("user");
 			List<Survey> submissions = surveyServices.getSubmissions(username,
 					2);
+			List<CustomMap> forms = surveyServices.getFormsByUsername(username);
 
 			mav.addObject("submissions", submissions);
+			mav.addObject("forms", forms);
 		}
 
 		mav.addObject("user", user);
@@ -64,7 +74,7 @@ public class UserSurveyController {
 	public void getFormList(HttpServletResponse response) throws IOException {
 
 		String username = userServices.getCurrentUsername();
-		List<String> formList = surveyServices.getFormsByUsername(username);
+		List<String> formList = surveyServices.getFormNamesByUsername(username);
 
 		String forms = FormUtil.compileFormList(formList);
 
@@ -193,6 +203,33 @@ public class UserSurveyController {
 					"Username is use. Choose a different one.");
 			response.setStatus(302);
 		}
-
+	}
+	
+	@RequestMapping(value = "/user/update", method = RequestMethod.POST)
+	public void updateUser(@RequestParam(required = true) String firstName,
+			@RequestParam(required = true) String lastName,
+			@RequestParam(required = true) String dateOfBirth,
+			@RequestParam(required = true) String email,
+			HttpServletResponse response)  { 
+		
+		User user = userServices.getUserByUsername(email);
+		
+		user.setFirstName(firstName); 
+		user.setLastName(lastName); 
+		
+		try { 
+			java.util.Date d = new SimpleDateFormat("mm/dd/yyyy", Locale.ENGLISH).parse(dateOfBirth);
+			java.sql.Date dd = new java.sql.Date(d.getTime()); 
+			user.setDateOfBirth(dd);
+			
+			userServices.updateUser(user);
+			response.setHeader("Msg", "Details updated successfully.");
+			response.setStatus(200);
+			
+		} catch(ParseException ex) { 
+			ex.printStackTrace(); 
+			response.setStatus(302); 
+			response.setHeader("Msg", "Updating failed.");
+		}
 	}
 }

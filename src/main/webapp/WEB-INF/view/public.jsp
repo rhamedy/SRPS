@@ -48,7 +48,7 @@
 				var lastName = document.getElementById("lastName").value; 
 				var email = document.getElementById("email").value; 
 				
-				if(firstName.length < 2 && lastName.length < 2 && email.length < 2) { 
+				if(firstName.length < 2 || lastName.length < 2 || email.length < 5) { 
 					alert("The inputed values are too small in size."); 
 				} else { 
 					if(email.indexOf("@") == -1 || (email.substring(email.indexOf("@"),email.length)).indexOf(".") == -1) { 

@@ -27,6 +27,7 @@ import org.xml.sax.SAXException;
 
 import com.srps.dao.SurveyDao;
 import com.srps.model.Survey;
+import com.srps.util.CustomMap;
 import com.srps.util.FormUtil;
 
 @Repository
@@ -71,8 +72,8 @@ public class SurveyServices {
 		return 0;
 	}
 
-	public List<String> getFormsByUsername(String username) {
-		return surveyDao.retrieveFormsByUsername(username);
+	public List<String> getFormNamesByUsername(String username) {
+		return surveyDao.retrieveFormNamesByUsername(username);
 	}
 
 	public MultipartFile getXmlFile(Map<String, MultipartFile> files) {
@@ -167,5 +168,13 @@ public class SurveyServices {
 	
 	public List<Survey> getSubmissions(String username, int flag) { 
 		return surveyDao.getSubmissions(username, flag); 
+	}
+	
+	public List<CustomMap> getFormsByUsername(String username) { 
+		return surveyDao.getFormsByUsername(username); 
+	}
+	
+	public List<CustomMap> getAllForms() { 
+		return surveyDao.getAllForms(); 
 	}
 }

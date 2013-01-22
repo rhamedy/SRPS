@@ -6,6 +6,10 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title> Profile (User) </title> 
 	</head>
+	<script src="/SRPS/resources/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <script src="/SRPS/resources/js/jquery-ui-1.7.3.custom.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/SRPS/resources/css/ui-lightness/jquery-ui-1.7.3.custom.css" type="text/css"/>
+    <script src="/SRPS/resources/js/datePicker.js" type="text/javascript"></script>
 	<style>
 		#main { 
 				border: 1px solid black; 
@@ -34,18 +38,18 @@
 	</style>
 	<script type="text/javascript">
 		function enableEdit() { 
-			document.getElementById("firstName").style.disabled = false; 
-			document.getElementById("lastName").style.disabled = false; 
-			document.getElementById("dateOfBirth").style.disabled = false; 
-			document.getElementById("updateButton").style.disabled = false; 
-			document.getElementById("editButton").style.disabled = true; 
+			document.getElementById("firstName").disabled = false; 
+			document.getElementById("lastName").disabled = false; 
+			document.getElementById("dateOfBirth").disabled = false; 
+			document.getElementById("updateButton").disabled = false; 
+			document.getElementById("editButton").disabled = true; 
 		}
 		
 		function validateUserInput() {
 				var firstName = document.getElementById("firstName").value; 
 				var lastName = document.getElementById("lastName").value; 
 				var date = document.getElementById("dateOfBirth").value; 
-				var email = document.gtElementById(("email")>value;
+				var email = document.getElementById("email").value;
 				
 				if(firstName.length < 2 && lastName.length < 2) { 
 					alert("The inputed values are too small in size."); 

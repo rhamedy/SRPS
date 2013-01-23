@@ -176,5 +176,11 @@ public class SurveyDao {
 		
 		return jdbcTemplate.queryForObject(SQL, new Object[]{formId}, String.class);
 	}
+	
+	public void deleteSubmission(String submissionId) { 
+		String SQL = "DELETE FROM survey.submissions WHERE id = ?"; 
+		
+		jdbcTemplate.update(SQL, new Object[]{submissionId}); 
+	}
 }
 

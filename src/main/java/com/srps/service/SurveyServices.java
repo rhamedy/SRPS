@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
 import com.srps.dao.SurveyDao;
 import com.srps.model.Survey;
 import com.srps.util.CustomMap;
+import com.srps.util.FileUtil;
 import com.srps.util.FormUtil;
 
 @Repository
@@ -191,6 +192,15 @@ public class SurveyServices {
 		File file = new File("/home/fareen/workspace/forms", formName); 
 		if(file.exists()) { 
 			file.delete(); 
+		}
+	}
+	
+	public void deleteSubmission(String submissionId) {
+		surveyDao.deleteSubmission(submissionId); 
+		
+		File dir = new File("/home/fareen/workspace/submissions/" + submissionId); 
+		if(dir.exists()) { 
+			FileUtil.deleteDirectory(dir); 
 		}
 	}
 }

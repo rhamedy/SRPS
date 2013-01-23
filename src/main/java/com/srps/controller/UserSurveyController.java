@@ -235,14 +235,23 @@ public class UserSurveyController {
 	}
 
 	@RequestMapping(value = "/form/delete", method = RequestMethod.GET)
-	public void deleteForm(@RequestParam String id,
-			HttpServletResponse response) {
+	public void deleteForm(@RequestParam String id, HttpServletResponse response) {
 
-			int formId = Integer.parseInt(id); 
+		int formId = Integer.parseInt(id);
+
+		surveyServices.deleteFormRelation(formId);
+		surveyServices.deleteForm(formId);
+
+		response.setStatus(200);
+	}
+
+	@RequestMapping(value = "/submission/delete", method = RequestMethod.POST)
+	public void deleteSubmission(@RequestParam String submissionId,
+			HttpServletResponse response) {
+		System.out.println("submissionId for deleting : " + submissionId);
 		
-			surveyServices.deleteFormRelation(formId); 
-			surveyServices.deleteForm(formId); 
+		surveyServices.deleteSubmission(submissionId);
 		
-			response.setStatus(200);
+		response.setStatus(200);
 	}
 }

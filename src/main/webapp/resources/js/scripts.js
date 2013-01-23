@@ -13,7 +13,6 @@ function getRequestObject() {
 }
 
 function deleteForm(formId) { 
-	alert("you got me!!!");
 	var request = getRequestObject();
 
 	request.onreadystatechange=function(){
@@ -27,6 +26,22 @@ function deleteForm(formId) {
 	request.open("GET","/SRPS/form/delete?id=" + formId,true);
 	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
 	request.send();
+}
+
+function deleteSubmission(submissionId) { 
+	var request = getRequestObject(); 
+	
+	request.onreadystatechange=function(){
+		if (request.readyState==4 && request.status==200) {
+			var e = document.getElementById(submissionId); 
+			e.parentNode.removeChild(e); 	
+		} else if(request.readyState==4 && request.status==302) { 
+			alert("deletiion failed!!!!");
+		}
+	}
+	request.open("POST","/SRPS/submission/delete",true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
+	request.send("submissionId=" + submissionId);
 }
 
 

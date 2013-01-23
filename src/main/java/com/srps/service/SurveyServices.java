@@ -177,4 +177,20 @@ public class SurveyServices {
 	public List<CustomMap> getAllForms() { 
 		return surveyDao.getAllForms(); 
 	}
+	
+	public void deleteFormRelation(int formId) { 
+		surveyDao.deleteFormRelation(formId); 
+	}
+	
+	public void deleteForm(int formId) { 
+		
+		String formName = surveyDao.getFormNameById(formId); 
+		
+		surveyDao.deleteForm(formId); 
+		
+		File file = new File("/home/fareen/workspace/forms", formName); 
+		if(file.exists()) { 
+			file.delete(); 
+		}
+	}
 }

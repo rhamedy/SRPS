@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,11 +51,11 @@ public class UserSurveyController {
 		if (bool) {
 			mav.setViewName("admin");
 			List<User> users = userServices.retrieveUsers();
-			List<CustomMap> forms = surveyServices.getAllForms(); 
+			List<CustomMap> forms = surveyServices.getAllForms();
 			List<Survey> submissions = surveyServices.getSubmissions("", 3);
-			
+
 			mav.addObject("users", users);
-			mav.addObject("forms", forms); 
+			mav.addObject("forms", forms);
 			mav.addObject("submissions", submissions);
 		} else {
 			mav.setViewName("user");
@@ -157,7 +158,7 @@ public class UserSurveyController {
 		} else {
 			int formId = surveyServices.getNextFormId();
 			String filename = FormUtil.escapeEmptySpaces(
-					xmlFile.getOriginalFilename(), formId);
+					xmlFile.getOriginalFilename(), ++formId);
 			surveyServices.storeBlankForm(formId, filename, username);
 			surveyServices.storeBlankFormInDisc(xmlFile, filename);
 		}
@@ -174,7 +175,6 @@ public class UserSurveyController {
 		mav.addObject("submissions", submissions);
 
 		return mav;
-
 	}
 
 	@RequestMapping(value = "/public/account", method = RequestMethod.POST)
@@ -204,32 +204,45 @@ public class UserSurveyController {
 			response.setStatus(302);
 		}
 	}
-	
+
 	@RequestMapping(value = "/user/update", method = RequestMethod.POST)
 	public void updateUser(@RequestParam(required = true) String firstName,
 			@RequestParam(required = true) String lastName,
 			@RequestParam(required = true) String dateOfBirth,
 			@RequestParam(required = true) String email,
-			HttpServletResponse response)  { 
-		
+			HttpServletResponse response) {
+
 		User user = userServices.getUserByUsername(email);
-		
-		user.setFirstName(firstName); 
-		user.setLastName(lastName); 
-		
-		try { 
-			java.util.Date d = new SimpleDateFormat("mm/dd/yyyy", Locale.ENGLISH).parse(dateOfBirth);
-			java.sql.Date dd = new java.sql.Date(d.getTime()); 
+
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+
+		try {
+			java.util.Date d = new SimpleDateFormat("mm/dd/yyyy",
+					Locale.ENGLISH).parse(dateOfBirth);
+			java.sql.Date dd = new java.sql.Date(d.getTime());
 			user.setDateOfBirth(dd);
-			
+
 			userServices.updateUser(user);
 			response.setHeader("Msg", "Details updated successfully.");
 			response.setStatus(200);
-			
-		} catch(ParseException ex) { 
-			ex.printStackTrace(); 
-			response.setStatus(302); 
+
+		} catch (ParseException ex) {
+			ex.printStackTrace();
+			response.setStatus(302);
 			response.setHeader("Msg", "Updating failed.");
 		}
+	}
+
+	@RequestMapping(value = "/form/delete", method = RequestMethod.GET)
+	public void deleteForm(@RequestParam String id,
+			HttpServletResponse response) {
+
+			int formId = Integer.parseInt(id); 
+		
+			surveyServices.deleteFormRelation(formId); 
+			surveyServices.deleteForm(formId); 
+		
+			response.setStatus(200);
 	}
 }

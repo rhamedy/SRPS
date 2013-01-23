@@ -28,7 +28,7 @@ public class SurveyDao {
 	}
 
 	public int getNextFormId() {
-		String SQL = "SELECT COUNT(*) from survey.blank_form";
+		String SQL = "SELECT MAX(form_id) from survey.blank_form";
 		return jdbcTemplate.queryForInt(SQL);
 	}
 
@@ -157,6 +157,24 @@ public class SurveyDao {
 		}); 
 		
 		return forms; 
+	}
+	
+	public void deleteFormRelation(int formId) { 
+		String SQL = "DELETE FROM survey.form_user WHERE form_id = ?";
+		
+		jdbcTemplate.update(SQL, new Object[]{formId}); 
+	}
+	
+	public void deleteForm(int formId) { 
+		String SQL = "DELETE FROM survey.blank_form WHERE form_id = ?";
+		
+		jdbcTemplate.update(SQL, new Object[]{formId}); 
+	}
+	
+	public String getFormNameById(int formId) { 
+		String SQL = "SELECT form_name FROM survey.blank_form WHERE form_id = ?"; 
+		
+		return jdbcTemplate.queryForObject(SQL, new Object[]{formId}, String.class);
 	}
 }
 

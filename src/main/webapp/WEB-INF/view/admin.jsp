@@ -10,6 +10,7 @@
     <script src="/SRPS/resources/js/jquery-ui-1.7.3.custom.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/SRPS/resources/css/ui-lightness/jquery-ui-1.7.3.custom.css" type="text/css"/>
     <script src="/SRPS/resources/js/datePicker.js" type="text/javascript"></script>
+    <script src="/SRPS/resources/js/scripts.js" type="text/javascript"></script>
 	<style>
 		#main { 
 				border: 1px solid black; 
@@ -94,6 +95,7 @@
 				request.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
 				request.send(data);
 			}
+			
 		</script>
 		
 	</script>
@@ -159,9 +161,9 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${forms}" var="f">
-							<tr>
+							<tr id="${f.key}">
 								<td value="${f.key}">${f.value}</td>
-								<td><a href="">delete</a></td>
+								<td><a href="javascript:deleteForm('${f.key}')">delete</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

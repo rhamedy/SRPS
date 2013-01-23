@@ -142,7 +142,7 @@
 								<td>${u.lastName}</td>
 								<td>${u.dateOfBirth}</td>
 								<td>${u.disabled}</td>
-								<td><a href="javascript:userEditWindow('${u.email}')">Update</a>|<a href="">delete</a>|<a href="">reset password</a></td>
+								<td><a href="javascript:userEditWindow('${u.email}')">Update</a>|<a href="javascript:deleteUser('${u.email}')">delete</a>|<a href="">reset password</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

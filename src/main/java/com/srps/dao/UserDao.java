@@ -154,4 +154,16 @@ public class UserDao {
 		
 		jdbcTemplate.update(SQL, new Object[]{username, roleId}); 
 	}
+	
+	public void deleteUserRoleRelation(String username) { 
+		String SQL = "DELETE FROM authentication.user_role WHERE username = ?";
+		
+		jdbcTemplate.update(SQL, new Object[]{username}); 
+	}
+	
+	public void deleteUser(String username) { 
+		String SQL = "DELETE FROM authentication.user WHERE username = ?"; 
+		
+		jdbcTemplate.update(SQL, new Object[]{username}); 
+	}
 }

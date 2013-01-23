@@ -314,4 +314,34 @@ public class UserSurveyController {
 		response.setHeader("Msg", "The edited fields were updated successfully."); 
 		response.setStatus(200); 
 	}
+	
+	@RequestMapping(value = "/user/delete", method = RequestMethod.GET) 
+	public void deleteUser(@RequestParam String username) { 
+		
+		if(surveyServices.hasFormsAssociatedWith(username)) { 
+			List<CustomMap> forms = surveyServices.getFormsByUsername(username); 
+			if(forms != null) { 
+				for(CustomMap f: forms) { 
+					surveyServices.deleteFormRelation(Integer.parseInt((f.getKey()).toString()));
+					surveyServices.deleteForm(Integer.parseInt((f.getKey()).toString())); 
+				}
+			}
+		}
+		
+		if(surveyServices.hasSubmissionsAssociatedWith(username)) { 
+			List<Survey> submissions = surveyServices.getSubmissions(username, 2);
+			
+			if(submissions != null) { 
+				for(Survey s: submissions) { 
+					surveyServices.deleteSubmission(s.getSubmissionId()); 
+				}
+			}
+		}
+		
+		if(userServices.userHasRoleAssigned(username)) { 
+			userServices.deleteUserRoleRelation(username); 
+		} 
+		
+		userServices.deleteUser(username); 
+	}
 }

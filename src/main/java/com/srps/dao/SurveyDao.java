@@ -182,5 +182,21 @@ public class SurveyDao {
 		
 		jdbcTemplate.update(SQL, new Object[]{submissionId}); 
 	}
+	
+	public boolean hasFormsAssociatedWith(String email) { 
+		String SQL = "SELECT COUNT (username) FROM survey.form_user WHERE username = ?";
+		
+		int count = jdbcTemplate.queryForInt(SQL, new Object[]{email}); 
+		
+		return count > 0 ? true : false; 
+	}
+	
+	public boolean hasSubmissionsAssociatedWith(String email) { 
+		String SQL = "SELECT COUNT (username) FROM survey.submissions WHERE username = ?";
+		
+		int count = jdbcTemplate.queryForInt(SQL, new Object[]{email}); 
+		
+		return count > 0 ? true : false; 
+	}
 }
 

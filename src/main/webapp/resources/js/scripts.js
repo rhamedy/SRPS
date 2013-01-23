@@ -98,4 +98,21 @@ function updateUserDetails(data) {
 	request.send(data);	
 }
 
+function deleteUser(username) { 
+	var request = getRequestObject(); 
+
+	request.onreadystatechange=function(){
+		if (request.readyState==4 && request.status==200) {
+			var e = document.getElementById(username); 
+			e.parentNode.removeChild(e);
+		} else if(request.readyState==4 && request.status==302) { 
+			alert("deleting user failed."); 
+		}
+	}
+
+	request.open("GET","/SRPS/user/delete?username=" + username,true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
+	request.send();
+}
+
 

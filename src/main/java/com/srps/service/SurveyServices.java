@@ -203,4 +203,12 @@ public class SurveyServices {
 			FileUtil.deleteDirectory(dir); 
 		}
 	}
+	
+	public boolean hasFormsAssociatedWith(String email) { 
+		return surveyDao.hasFormsAssociatedWith(email); 
+	}
+	
+	public boolean hasSubmissionsAssociatedWith(String email) { 
+		return surveyDao.hasSubmissionsAssociatedWith(email); 
+	}
 }

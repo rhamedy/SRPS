@@ -81,4 +81,12 @@ public class UserServices {
 	public void assignUserRole(String username, int roleId) { 
 		userDao.assignUserRole(username, roleId); 
 	}
+	
+	public void deleteUser(String username) { 
+		userDao.deleteUser(username);
+	}
+	
+	public void deleteUserRoleRelation(String username) { 
+		userDao.deleteUserRoleRelation(username); 
+	}
 }

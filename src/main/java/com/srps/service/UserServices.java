@@ -61,4 +61,24 @@ public class UserServices {
 	public void updateUser(User user) { 
 		userDao.updateUser(user);
 	}
+	
+	public String getUserRole(String email) { 
+		return userDao.getUserRole(email);
+	}
+	
+	public int getRoleIdByRoleName(String roleName) { 
+		return userDao.getRoleIdByRoleName(roleName); 
+	}
+	
+	public boolean userHasRoleAssigned(String email) { 
+		return userDao.userHasRoleAssigned(email); 
+	}
+	
+	public void updateUserRole(String username, int roleId) { 
+		userDao.updateUserRole(username, roleId); 
+	}
+	
+	public void assignUserRole(String username, int roleId) { 
+		userDao.assignUserRole(username, roleId); 
+	}
 }

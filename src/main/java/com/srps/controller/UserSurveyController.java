@@ -249,9 +249,69 @@ public class UserSurveyController {
 	public void deleteSubmission(@RequestParam String submissionId,
 			HttpServletResponse response) {
 		System.out.println("submissionId for deleting : " + submissionId);
-		
+
 		surveyServices.deleteSubmission(submissionId);
-		
+
 		response.setStatus(200);
+	}
+
+	@RequestMapping(value = "/user/edit", method = RequestMethod.GET)
+	public ModelAndView editUser(@RequestParam String email) {
+		ModelAndView mav = new ModelAndView();
+
+		mav.setViewName("editUser");
+
+		User user = userServices.getUserByUsername(email);
+		String role = "User";
+
+		if (userServices.userHasRoleAssigned(user.getEmail())) {
+			role = userServices.getUserRole(email);
+		}
+
+		System.out.println("user= " + user.getFirstName() + ", role = " + role
+				+ ", disabled = " + user.isDisabled());
+
+		mav.addObject("user", user);
+		mav.addObject("role", role);
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/user/edit", method = RequestMethod.POST)
+	public void editUser(@RequestParam String firstName,
+			@RequestParam String lastName, @RequestParam String dateOfBirth,
+			@RequestParam String email, @RequestParam String disabled,
+			@RequestParam String role, HttpServletResponse response) {
+		
+		boolean d = disabled.equals("True")? true: false;
+		int roleId = userServices.getRoleIdByRoleName(role); 
+		
+		User user = userServices.getUserByUsername(email); 
+		
+		try {
+			java.util.Date dd = new SimpleDateFormat("mm/dd/yyyy",
+					Locale.ENGLISH).parse(dateOfBirth);
+			java.sql.Date ddd = new java.sql.Date(dd.getTime());
+			user.setDateOfBirth(ddd);
+		} catch (ParseException ex) {
+			ex.printStackTrace();
+		}
+		
+		user.setFirstName(firstName); 
+		user.setLastName(lastName); 
+		user.setDisabled(d);
+		
+		userServices.updateUser(user); 
+		
+		if(userServices.userHasRoleAssigned(user.getEmail())) { 
+			if(!userServices.getUserRole(user.getEmail()).equals(role)) {
+				userServices.updateUserRole(user.getEmail(), roleId); 
+			} 
+		} else { 
+			userServices.assignUserRole(user.getEmail(), roleId); 
+		}
+		
+		response.setHeader("Msg", "The edited fields were updated successfully."); 
+		response.setStatus(200); 
 	}
 }

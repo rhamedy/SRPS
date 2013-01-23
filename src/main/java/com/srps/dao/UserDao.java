@@ -111,11 +111,47 @@ public class UserDao {
 
 	public void updateUser(User user) {
 		String SQL = "UPDATE authentication.user SET first_name = ?, last_name = ?, "
-				+ "dob = ? WHERE username = ?";
+				+ "dob = ?, disabled = ? WHERE username = ?";
 
 		jdbcTemplate.update(
 				SQL,
 				new Object[] { user.getFirstName(), user.getLastName(),
-						user.getDateOfBirth(), user.getEmail()});
+						user.getDateOfBirth(), user.isDisabled(), user.getEmail()});
+	}
+	
+	public String getUserRole(String email) { 
+		String SQL = "SELECT r.role_name FROM authentication.user u, authentication.role r, " +
+				"authentication.user_role ur WHERE u.username = ? AND u.username = ur.username" +
+				" AND ur.role_id = r.role_id"; 
+		
+		return jdbcTemplate.queryForObject(SQL, new Object[]{email}, String.class);
+	}
+	
+	public int getRoleIdByRoleName(String roleName) { 
+		String SQL = "SELECT role_id FROM authentication.role WHERE role_name = ?"; 
+		
+		return jdbcTemplate.queryForInt(SQL, new Object[]{roleName});
+	}
+	
+	public boolean userHasRoleAssigned(String email) { 
+		String SQL = "SELECT COUNT(*) FROM authentication.user u, authentication.role r, " +
+				"authentication.user_role ur WHERE u.username = ? AND u.username = ur.username" +
+				" AND ur.role_id = r.role_id"; 
+		
+		int result = jdbcTemplate.queryForInt(SQL, new Object[]{email}); 
+		
+		return (result > 0)? true : false; 
+	}
+	
+	public void updateUserRole(String username, int roleId) { 
+		String SQL = "UPDATE authentication.user_role SET role_id = ? WHERE username = ?"; 
+		
+		jdbcTemplate.update(SQL, new Object[]{roleId, username}); 
+	}
+	
+	public void assignUserRole(String username, int roleId) { 
+		String SQL = "INSERT INTO authentication.user_role (username, role_id) values (?,?)"; 
+		
+		jdbcTemplate.update(SQL, new Object[]{username, roleId}); 
 	}
 }

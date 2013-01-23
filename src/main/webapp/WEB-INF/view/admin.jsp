@@ -44,7 +44,6 @@
 	</style>
 	<script type="text/javascript">
 		function enableEdit() { 
-			alert("hi");
 			document.getElementById("firstName").disabled = false; 
 			document.getElementById("lastName").disabled = false; 
 			document.getElementById("dateOfBirth").disabled = false; 
@@ -137,13 +136,13 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${users}" var="u">
-							<tr>
+							<tr id="${u.email}">
 								<td>${u.email}</td>
 								<td>${u.firstName}</td>
 								<td>${u.lastName}</td>
 								<td>${u.dateOfBirth}</td>
 								<td>${u.disabled}</td>
-								<td><a href="">Update</a>|<a href="">delete</a>|<a href="">reset password</a></td>
+								<td><a href="javascript:userEditWindow('${u.email}')">Update</a>|<a href="">delete</a>|<a href="">reset password</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -115,4 +115,20 @@ function deleteUser(username) {
 	request.send();
 }
 
+function resetPassword(username) { 
+	var request = getRequestObject(); 
+	
+	request.onreadystatechange=function(){
+		if (request.readyState==4 && request.status==200) {
+			alert("a new password is sent to you email.");
+		} else if(request.readyState==4 && request.status==302) { 
+			alert("reseting passwor failed."); 
+		}
+	}
+
+	request.open("GET","/SRPS/user/resetPassword?username=" + username,true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
+	request.send();
+}
+
 

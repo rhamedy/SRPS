@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ import com.srps.service.SurveyServices;
 import com.srps.service.UserServices;
 import com.srps.util.CustomMap;
 import com.srps.util.FormUtil;
+import com.srps.util.MailClient;
 
 @Controller
 public class UserSurveyController {
@@ -218,10 +220,19 @@ public class UserSurveyController {
 		user.setLastName(lastName);
 
 		try {
-			java.util.Date d = new SimpleDateFormat("mm/dd/yyyy",
-					Locale.ENGLISH).parse(dateOfBirth);
-			java.sql.Date dd = new java.sql.Date(d.getTime());
-			user.setDateOfBirth(dd);
+			java.util.Date dd = null; 
+			
+			if(dateOfBirth.contains("-")) { 
+				dd = new SimpleDateFormat("yyyy-MM-dd",
+						Locale.ENGLISH).parse(dateOfBirth);
+			} else { 
+				dd = new SimpleDateFormat("mm/dd/yyyy",
+						Locale.ENGLISH).parse(dateOfBirth);
+			}
+			
+			
+			java.sql.Date ddd = new java.sql.Date(dd.getTime());
+			user.setDateOfBirth(ddd);
 
 			userServices.updateUser(user);
 			response.setHeader("Msg", "Details updated successfully.");
@@ -282,66 +293,97 @@ public class UserSurveyController {
 			@RequestParam String lastName, @RequestParam String dateOfBirth,
 			@RequestParam String email, @RequestParam String disabled,
 			@RequestParam String role, HttpServletResponse response) {
-		
-		boolean d = disabled.equals("True")? true: false;
-		int roleId = userServices.getRoleIdByRoleName(role); 
-		
-		User user = userServices.getUserByUsername(email); 
-		
+
+		boolean d = disabled.equals("True") ? true : false;
+		int roleId = userServices.getRoleIdByRoleName(role);
+
+		User user = userServices.getUserByUsername(email);
+		java.util.Date dd = null; 
 		try {
-			java.util.Date dd = new SimpleDateFormat("mm/dd/yyyy",
-					Locale.ENGLISH).parse(dateOfBirth);
+			if(dateOfBirth.contains("-")) { 
+				dd = new SimpleDateFormat("yyyy-MM-dd",
+						Locale.ENGLISH).parse(dateOfBirth);
+			} else { 
+				dd = new SimpleDateFormat("mm/dd/yyyy",
+						Locale.ENGLISH).parse(dateOfBirth);
+			}
+			
 			java.sql.Date ddd = new java.sql.Date(dd.getTime());
 			user.setDateOfBirth(ddd);
 		} catch (ParseException ex) {
 			ex.printStackTrace();
 		}
-		
-		user.setFirstName(firstName); 
-		user.setLastName(lastName); 
+
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
 		user.setDisabled(d);
-		
-		userServices.updateUser(user); 
-		
-		if(userServices.userHasRoleAssigned(user.getEmail())) { 
-			if(!userServices.getUserRole(user.getEmail()).equals(role)) {
-				userServices.updateUserRole(user.getEmail(), roleId); 
-			} 
-		} else { 
-			userServices.assignUserRole(user.getEmail(), roleId); 
-		}
-		
-		response.setHeader("Msg", "The edited fields were updated successfully."); 
-		response.setStatus(200); 
-	}
-	
-	@RequestMapping(value = "/user/delete", method = RequestMethod.GET) 
-	public void deleteUser(@RequestParam String username) { 
-		
-		if(surveyServices.hasFormsAssociatedWith(username)) { 
-			List<CustomMap> forms = surveyServices.getFormsByUsername(username); 
-			if(forms != null) { 
-				for(CustomMap f: forms) { 
-					surveyServices.deleteFormRelation(Integer.parseInt((f.getKey()).toString()));
-					surveyServices.deleteForm(Integer.parseInt((f.getKey()).toString())); 
-				}
+
+		userServices.updateUser(user);
+
+		if (userServices.userHasRoleAssigned(user.getEmail())) {
+			if (!userServices.getUserRole(user.getEmail()).equals(role)) {
+				userServices.updateUserRole(user.getEmail(), roleId);
 			}
+		} else {
+			userServices.assignUserRole(user.getEmail(), roleId);
 		}
-		
-		if(surveyServices.hasSubmissionsAssociatedWith(username)) { 
-			List<Survey> submissions = surveyServices.getSubmissions(username, 2);
+
+		if(!userServices.doesUserHavePassword(user.getEmail())) {
 			
-			if(submissions != null) { 
-				for(Survey s: submissions) { 
-					surveyServices.deleteSubmission(s.getSubmissionId()); 
+			System.out.println("no user does not have password!!!!"); 
+			
+			String randomPassword = UUID.randomUUID().toString(); 
+			String shortPassword = new StringBuffer(randomPassword).substring(0, 6);
+			
+			userServices.changePassword(user.getEmail(), shortPassword); 
+		}
+		
+		response.setHeader("Msg",
+				"The edited fields were updated successfully.");
+		response.setStatus(200);
+	}
+
+	@RequestMapping(value = "/user/delete", method = RequestMethod.GET)
+	public void deleteUser(@RequestParam String username) {
+
+		if (surveyServices.hasFormsAssociatedWith(username)) {
+			List<CustomMap> forms = surveyServices.getFormsByUsername(username);
+			if (forms != null) {
+				for (CustomMap f : forms) {
+					surveyServices.deleteFormRelation(Integer.parseInt((f
+							.getKey()).toString()));
+					surveyServices.deleteForm(Integer.parseInt((f.getKey())
+							.toString()));
 				}
 			}
 		}
-		
-		if(userServices.userHasRoleAssigned(username)) { 
-			userServices.deleteUserRoleRelation(username); 
-		} 
-		
-		userServices.deleteUser(username); 
+
+		if (surveyServices.hasSubmissionsAssociatedWith(username)) {
+			List<Survey> submissions = surveyServices.getSubmissions(username,
+					2);
+
+			if (submissions != null) {
+				for (Survey s : submissions) {
+					surveyServices.deleteSubmission(s.getSubmissionId());
+				}
+			}
+		}
+
+		if (userServices.userHasRoleAssigned(username)) {
+			userServices.deleteUserRoleRelation(username);
+		}
+
+		userServices.deleteUser(username);
+	}
+
+	@RequestMapping(value = "/user/resetPassword", method = RequestMethod.GET)
+	public void resetPassword(@RequestParam String username,
+			HttpServletResponse response) {
+		String randomPassword = UUID.randomUUID().toString(); 
+		String shortPassword = new StringBuffer(randomPassword).substring(0, 6);
+
+		userServices.changePassword(username, shortPassword); 
+
+		response.setStatus(200);
 	}
 }

@@ -89,4 +89,23 @@ public class UserServices {
 	public void deleteUserRoleRelation(String username) { 
 		userDao.deleteUserRoleRelation(username); 
 	}
+	
+	public boolean doesUserHavePassword(String username) { 
+		return userDao.doesUserHavePassword(username); 
+	}
+	
+	public void changePassword(String username, String newPassword) { 
+		userDao.changePassword(username, newPassword); 
+		
+		final String password = userDao
+				.getPasswordByUsername("srps.system@gmail.com");
+		
+		String subject = "Password Reset Successfully.";
+		String text = "Your password has been reset to the follow \n\n "
+				+ "password: " + newPassword + "\n\n" 
+				+ "Try logging in using your username and new password. "
+				+ "\n\n SRPS Team";
+
+		MailClient.sendEmail(username, password, subject, text);
+	}
 }

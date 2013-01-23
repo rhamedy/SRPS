@@ -166,4 +166,20 @@ public class UserDao {
 		
 		jdbcTemplate.update(SQL, new Object[]{username}); 
 	}
+	
+	public void changePassword(String username, String newPassword) { 
+		String SQL = "UPDATE authentication.user SET password = ? WHERE username = ?"; 
+				
+		jdbcTemplate.update(SQL, new Object[]{newPassword, username}); 
+	}
+	
+	public boolean doesUserHavePassword(String username) { 
+		String SQL = "SELECT password FROM authentication.user WHERE username = ?"; 
+		
+		String password = jdbcTemplate.queryForObject(SQL, new Object[]{username}, String.class); 
+		
+		System.out.println("password from dao : " + password);
+		
+		return (password == null || password.length() == 0) ? false : true; 
+	}
 }

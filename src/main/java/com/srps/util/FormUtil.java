@@ -178,7 +178,7 @@ public class FormUtil {
 					+ "</label><br>"
 					+ "<textarea rows=\"10\" cols=\"10\" name=\"" + e.getName()
 					+ "\" value=\"" + e.getValue() + "\">" + e.getValue()
-					+ "</textarea><br>";
+					+ "</textarea><br><br>";
 
 			return temp;
 
@@ -193,7 +193,7 @@ public class FormUtil {
 					+ "\" checked >" + e.getValue()
 					+ "</input><br><input type=\"radio\" name=\"" + e.getName()
 					+ "\" value=\"" + ((e.getValue().equals(s)) ? y : s)
-					+ "\">" + ((e.getValue().equals(s)) ? y : s) + "</input>";
+					+ "\">" + ((e.getValue().equals(s)) ? y : s) + "</input><br><br>";
 
 			return temp;
 
@@ -203,7 +203,7 @@ public class FormUtil {
 					+ fe.getText() + "</label><br>"
 					+ "<input type=\"text\" name =\"" + e.getName()
 					+ "\" id=\"dateOfBirth\" value=\"" + e.getValue()
-					+ "\" /><br>";
+					+ "\" /><br><br>";
 
 			return temp;
 
@@ -213,11 +213,11 @@ public class FormUtil {
 					+ e.getName()
 					+ "\">"
 					+ fe.getText()
-					+ "</label><br>"
+					+ "</label><br><br>"
 					+ "<embed name=\""
 					+ e.getName()
 					+ "\" height=\"50\" width=\"100\" src=\"http://localhost:8080/SRPS/submission/sound?id="
-					+ e.getValue() + "&submissionId=" + submissionId + "\" />";
+					+ e.getValue() + "&submissionId=" + submissionId + "\" /><br><br>";
 
 			return temp;
 
@@ -228,11 +228,11 @@ public class FormUtil {
 					+ e.getName()
 					+ "\">"
 					+ fe.getText()
-					+ "</label><br>"
+					+ "</label><br><br>"
 					+ "<img name=\""
 					+ e.getName()
 					+ "\" src=\"http://localhost:8080/SRPS/submission/image?id="
-					+ e.getValue() + "&submissionId=" + submissionId + "\" />";
+					+ e.getValue() + "&submissionId=" + submissionId + "\" /><br><br>";
 
 			return temp;
 

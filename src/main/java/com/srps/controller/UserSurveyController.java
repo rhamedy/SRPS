@@ -406,16 +406,20 @@ public class UserSurveyController {
 
 		mav.addObject("htmlContent", htmlView);
 
-		System.out.println("htmlContent : " + htmlView);
+		//System.out.println("htmlContent : " + htmlView);
 
 		return mav;
 	}
 
 	@RequestMapping(value = "/submission/image", method = RequestMethod.GET)
-	public void getImage(@RequestParam String imageId,
+	public void getImage(@RequestParam String id,
 			@RequestParam String submissionId, HttpServletResponse response) {
+		
+		System.out.println("inside /submission/image id : " + id); 
+		
+		
 		response.setContentType("image/jpeg");
-		File file = new File("/home/fareen/workspace/submissions/" + submissionId, imageId);
+		File file = new File("/home/fareen/workspace/submissions/" + submissionId, id);
 		try { 
 			InputStream is = new FileInputStream(file); 
 			IOUtils.copy(is, response.getOutputStream()); 

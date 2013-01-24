@@ -194,7 +194,7 @@
 									<td>${s.audio}</td>
 									<td>${s.geopoint}</td>
 									<td>${s.submissionDate}</td>
-									<td><a href=""> view </a> | <a href="javascript:deleteSubmission('${s.submissionId}')"> delete </a> | <a href=""> export </a></td>
+									<td><a href="javascript:viewSubmission('${s.submissionId}')"> view </a> | <a href="javascript:deleteSubmission('${s.submissionId}')"> delete </a> | <a href=""> export </a></td>
 								</tr>
 							</c:forEach>
 						</tbody>

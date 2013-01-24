@@ -3,6 +3,7 @@ package com.srps.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.UUID;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -152,6 +154,8 @@ public class UserSurveyController {
 	public void upload(@RequestParam String username,
 			MultipartHttpServletRequest request) throws MalformedURLException {
 		MultipartFile xmlFile = surveyServices.getXmlFile(request.getFileMap());
+		MultipartFile mapperFile = surveyServices.getMapperFile(request
+				.getFileMap());
 
 		// surveyServices.validateXml(xmlFile);
 
@@ -161,8 +165,11 @@ public class UserSurveyController {
 			int formId = surveyServices.getNextFormId();
 			String filename = FormUtil.escapeEmptySpaces(
 					xmlFile.getOriginalFilename(), ++formId);
+
 			surveyServices.storeBlankForm(formId, filename, username);
 			surveyServices.storeBlankFormInDisc(xmlFile, filename);
+			surveyServices.storeSurveyMapperInDisc(mapperFile,
+					filename.replace(".xml", ".txt"));
 		}
 	}
 
@@ -220,17 +227,16 @@ public class UserSurveyController {
 		user.setLastName(lastName);
 
 		try {
-			java.util.Date dd = null; 
-			
-			if(dateOfBirth.contains("-")) { 
-				dd = new SimpleDateFormat("yyyy-MM-dd",
-						Locale.ENGLISH).parse(dateOfBirth);
-			} else { 
-				dd = new SimpleDateFormat("mm/dd/yyyy",
-						Locale.ENGLISH).parse(dateOfBirth);
+			java.util.Date dd = null;
+
+			if (dateOfBirth.contains("-")) {
+				dd = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+						.parse(dateOfBirth);
+			} else {
+				dd = new SimpleDateFormat("mm/dd/yyyy", Locale.ENGLISH)
+						.parse(dateOfBirth);
 			}
-			
-			
+
 			java.sql.Date ddd = new java.sql.Date(dd.getTime());
 			user.setDateOfBirth(ddd);
 
@@ -298,16 +304,16 @@ public class UserSurveyController {
 		int roleId = userServices.getRoleIdByRoleName(role);
 
 		User user = userServices.getUserByUsername(email);
-		java.util.Date dd = null; 
+		java.util.Date dd = null;
 		try {
-			if(dateOfBirth.contains("-")) { 
-				dd = new SimpleDateFormat("yyyy-MM-dd",
-						Locale.ENGLISH).parse(dateOfBirth);
-			} else { 
-				dd = new SimpleDateFormat("mm/dd/yyyy",
-						Locale.ENGLISH).parse(dateOfBirth);
+			if (dateOfBirth.contains("-")) {
+				dd = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+						.parse(dateOfBirth);
+			} else {
+				dd = new SimpleDateFormat("mm/dd/yyyy", Locale.ENGLISH)
+						.parse(dateOfBirth);
 			}
-			
+
 			java.sql.Date ddd = new java.sql.Date(dd.getTime());
 			user.setDateOfBirth(ddd);
 		} catch (ParseException ex) {
@@ -328,16 +334,17 @@ public class UserSurveyController {
 			userServices.assignUserRole(user.getEmail(), roleId);
 		}
 
-		if(!userServices.doesUserHavePassword(user.getEmail())) {
-			
-			System.out.println("no user does not have password!!!!"); 
-			
-			String randomPassword = UUID.randomUUID().toString(); 
-			String shortPassword = new StringBuffer(randomPassword).substring(0, 6);
-			
-			userServices.changePassword(user.getEmail(), shortPassword); 
+		if (!userServices.doesUserHavePassword(user.getEmail())) {
+
+			System.out.println("no user does not have password!!!!");
+
+			String randomPassword = UUID.randomUUID().toString();
+			String shortPassword = new StringBuffer(randomPassword).substring(
+					0, 6);
+
+			userServices.changePassword(user.getEmail(), shortPassword);
 		}
-		
+
 		response.setHeader("Msg",
 				"The edited fields were updated successfully.");
 		response.setStatus(200);
@@ -379,11 +386,41 @@ public class UserSurveyController {
 	@RequestMapping(value = "/user/resetPassword", method = RequestMethod.GET)
 	public void resetPassword(@RequestParam String username,
 			HttpServletResponse response) {
-		String randomPassword = UUID.randomUUID().toString(); 
+		String randomPassword = UUID.randomUUID().toString();
 		String shortPassword = new StringBuffer(randomPassword).substring(0, 6);
 
-		userServices.changePassword(username, shortPassword); 
+		userServices.changePassword(username, shortPassword);
 
 		response.setStatus(200);
+	}
+
+	@RequestMapping(value = "/submission/view", method = RequestMethod.GET)
+	public ModelAndView viewSubmission(@RequestParam String id) {
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("viewSubmission");
+
+		Survey survey = surveyServices.getSubmissionById(id);
+
+		String htmlView = surveyServices.generateHtmlViewFromSubmission(survey);
+
+		mav.addObject("htmlContent", htmlView);
+
+		System.out.println("htmlContent : " + htmlView);
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/submission/image", method = RequestMethod.GET)
+	public void getImage(@RequestParam String imageId,
+			@RequestParam String submissionId, HttpServletResponse response) {
+		response.setContentType("image/jpeg");
+		File file = new File("/home/fareen/workspace/submissions/" + submissionId, imageId);
+		try { 
+			InputStream is = new FileInputStream(file); 
+			IOUtils.copy(is, response.getOutputStream()); 
+		} catch(Exception ex) { 
+			ex.printStackTrace(); 
+		}
 	}
 }

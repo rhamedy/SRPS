@@ -86,6 +86,16 @@ public class SurveyServices {
 		}
 		return null;
 	}
+	
+	public MultipartFile getMapperFile(Map<String, MultipartFile> files) { 
+		for(Map.Entry<String, MultipartFile> entry : files.entrySet()) { 
+			MultipartFile temp = entry.getValue(); 
+			if(temp.getOriginalFilename().endsWith(".txt")) {
+				return temp; 
+			}
+		}
+		return null;
+	}
 
 	public void createSubmissionDirectoryInDisk(String submissionId) {
 		File dir = new File("/home/fareen/workspace/submissions", submissionId);
@@ -167,6 +177,17 @@ public class SurveyServices {
 		}
 	}
 	
+	public void storeSurveyMapperInDisc(MultipartFile file, String filename) { 
+		try {
+			FileOutputStream fos = new FileOutputStream(
+					"/home/fareen/workspace/forms/" + filename);
+			fos.write(file.getBytes());
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public List<Survey> getSubmissions(String username, int flag) { 
 		return surveyDao.getSubmissions(username, flag); 
 	}
@@ -210,5 +231,14 @@ public class SurveyServices {
 	
 	public boolean hasSubmissionsAssociatedWith(String email) { 
 		return surveyDao.hasSubmissionsAssociatedWith(email); 
+	}
+	
+	public Survey getSubmissionById(String submissionId) { 
+		return surveyDao.getSubmissionById(submissionId);
+	}
+	
+	public String generateHtmlViewFromSubmission(Survey survey) { 
+		String htmlView = FileUtil.readMapperFile(survey); 
+		return htmlView; 
 	}
 }

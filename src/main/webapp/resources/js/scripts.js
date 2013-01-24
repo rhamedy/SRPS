@@ -131,4 +131,13 @@ function resetPassword(username) {
 	request.send();
 }
 
+function viewSubmission(submissionId) { 
+	window.location = "http://localhost:8080/SRPS/submission/view?id=" + submissionId; 
+}
+
+function loadContent(htmlContent) { 
+	alert("hi, this is load content."); 
+	console.log("htmlContent : " + htmlContent); 
+	document.getElementById("submissionView").innerHTML = htmlContent; 
+}
 

@@ -198,5 +198,28 @@ public class SurveyDao {
 		
 		return count > 0 ? true : false; 
 	}
+	
+	public Survey getSubmissionById(String id) { 
+		String SQL = "SELECT * FROM survey.submissions WHERE id = ?"; 
+		
+		Survey survey = jdbcTemplate.queryForObject(SQL, new Object[]{id}, new RowMapper<Survey>(){
+			public Survey mapRow(ResultSet rs, int rowNum) throws SQLException { 
+				Survey temp = new Survey(); 
+				
+				temp.setSubmissionId(rs.getString("id")); 
+				temp.setFormName(rs.getString("form_name")); 
+				temp.setGeopoint(rs.getBoolean("has_geopoint")); 
+				temp.setImage(rs.getBoolean("has_image")); 
+				temp.setAudio(rs.getBoolean("has_audio")); 
+				temp.setUsername(rs.getString("username")); 
+				temp.setSubmissionDate(rs.getTime("submission_date")); 
+				temp.setVisibility(rs.getBoolean("private")); 
+				
+				return temp; 
+			}
+		}); 
+		
+		return survey; 
+	}
 }
 

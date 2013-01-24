@@ -406,7 +406,7 @@ public class UserSurveyController {
 
 		mav.addObject("htmlContent", htmlView);
 
-		//System.out.println("htmlContent : " + htmlView);
+		// System.out.println("htmlContent : " + htmlView);
 
 		return mav;
 	}
@@ -414,17 +414,31 @@ public class UserSurveyController {
 	@RequestMapping(value = "/submission/image", method = RequestMethod.GET)
 	public void getImage(@RequestParam String id,
 			@RequestParam String submissionId, HttpServletResponse response) {
-		
-		System.out.println("inside /submission/image id : " + id); 
-		
-		
+
 		response.setContentType("image/jpeg");
-		File file = new File("/home/fareen/workspace/submissions/" + submissionId, id);
+		File file = new File("/home/fareen/workspace/submissions/"
+				+ submissionId, id);
+		try {
+			InputStream is = new FileInputStream(file);
+			IOUtils.copy(is, response.getOutputStream());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value = "/submission/audio", method = RequestMethod.GET)
+	public void getAudio(@RequestParam String id,
+			@RequestParam String submissionId, HttpServletResponse response) {
+		
+		response.setContentType("audio/ogg"); 
+		File file = new File("/home/fareen/workspace/submissions/" + submissionId, id); 
+		
 		try { 
 			InputStream is = new FileInputStream(file); 
 			IOUtils.copy(is, response.getOutputStream()); 
 		} catch(Exception ex) { 
 			ex.printStackTrace(); 
 		}
+		
 	}
 }

@@ -214,10 +214,10 @@ public class FormUtil {
 					+ "\">"
 					+ fe.getText()
 					+ "</label><br><br>"
-					+ "<embed name=\""
+					+ "<audio><source name=\""
 					+ e.getName()
-					+ "\" height=\"50\" width=\"100\" src=\"http://localhost:8080/SRPS/submission/sound?id="
-					+ e.getValue() + "&submissionId=" + submissionId + "\" /><br><br>";
+					+ "\" src=\"http://localhost:8080/SRPS/submission/audio?id="
+					+ e.getValue() + "&submissionId=" + submissionId + "\" type=\"audio/ogg\" ></source></audio><br><br>";
 
 			return temp;
 

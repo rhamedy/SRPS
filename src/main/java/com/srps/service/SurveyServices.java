@@ -98,7 +98,8 @@ public class SurveyServices {
 	}
 
 	public void createSubmissionDirectoryInDisk(String submissionId) {
-		File dir = new File("/home/fareen/workspace/submissions", submissionId);
+		//File dir = new File("/home/fareen/workspace/submissions", submissionId);
+		File dir = new File("C:\\project\\submissions", submissionId);
 		dir.mkdir();
 	}
 
@@ -110,8 +111,12 @@ public class SurveyServices {
 		try {
 			for (Map.Entry<String, MultipartFile> entry : files.entrySet()) {
 				MultipartFile f = entry.getValue();
-				file = new File("/home/fareen/workspace/submissions/"
+//				file = new File("/home/fareen/workspace/submissions/"
+//						+ submissionId, f.getOriginalFilename());
+				
+				file = new File("C:\\project\\submissions\\"
 						+ submissionId, f.getOriginalFilename());
+				
 				f.transferTo(file);
 				file.createNewFile();
 			}
@@ -123,7 +128,10 @@ public class SurveyServices {
 	}
 
 	public boolean processXmlFile(MultipartFile file, String submissionId, String username) {
-		File xmlFile = new File("/home/fareen/workspace/submissions/"
+//		File xmlFile = new File("/home/fareen/workspace/submissions/"
+//				+ submissionId, file.getOriginalFilename());
+		
+		File xmlFile = new File("C:\\project\\submissions\\"
 				+ submissionId, file.getOriginalFilename());
 		
 		Survey survey;
@@ -168,8 +176,12 @@ public class SurveyServices {
 
 	public void storeBlankFormInDisc(MultipartFile file, String filename) {
 		try {
+//			FileOutputStream fos = new FileOutputStream(
+//					"/home/fareen/workspace/forms/" + filename);
+			
 			FileOutputStream fos = new FileOutputStream(
-					"/home/fareen/workspace/forms/" + filename);
+					"C:\\project\\forms\\" + filename);
+			
 			fos.write(file.getBytes());
 			fos.close();
 		} catch (IOException ex) {
@@ -179,8 +191,12 @@ public class SurveyServices {
 	
 	public void storeSurveyMapperInDisc(MultipartFile file, String filename) { 
 		try {
+//			FileOutputStream fos = new FileOutputStream(
+//					"/home/fareen/workspace/forms/" + filename);
+			
 			FileOutputStream fos = new FileOutputStream(
-					"/home/fareen/workspace/forms/" + filename);
+					"C:\\project\\forms\\" + filename);
+			
 			fos.write(file.getBytes());
 			fos.close();
 		} catch (IOException ex) {
@@ -210,7 +226,8 @@ public class SurveyServices {
 		
 		surveyDao.deleteForm(formId); 
 		
-		File file = new File("/home/fareen/workspace/forms", formName); 
+//		File file = new File("/home/fareen/workspace/forms", formName); 
+		File file = new File("C:\\project\\forms", formName); 
 		if(file.exists()) { 
 			file.delete(); 
 		}
@@ -219,7 +236,8 @@ public class SurveyServices {
 	public void deleteSubmission(String submissionId) {
 		surveyDao.deleteSubmission(submissionId); 
 		
-		File dir = new File("/home/fareen/workspace/submissions/" + submissionId); 
+//		File dir = new File("/home/fareen/workspace/submissions/" + submissionId);
+		File dir = new File("C:\\project\\submissions\\" + submissionId);
 		if(dir.exists()) { 
 			FileUtil.deleteDirectory(dir); 
 		}

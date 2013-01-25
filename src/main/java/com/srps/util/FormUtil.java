@@ -37,8 +37,13 @@ public class FormUtil {
 		output.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
 		output.append("<forms>");
 
+//		for (String form : forms) {
+//			output.append("<form url=\"http://192.168.56.101:8443/SRPS/mobile/download?formName="
+//					+ form + "\"> " + form + "</form>\n");
+//		}
+		
 		for (String form : forms) {
-			output.append("<form url=\"http://192.168.56.101:8443/SRPS/mobile/download?formName="
+			output.append("<form url=\"http://82.219.186.143:8443/SRPS/mobile/download?formName="
 					+ form + "\"> " + form + "</form>\n");
 		}
 
@@ -214,10 +219,10 @@ public class FormUtil {
 					+ "\">"
 					+ fe.getText()
 					+ "</label><br><br>"
-					+ "<audio><source name=\""
+					+ "<embed name=\""
 					+ e.getName()
 					+ "\" src=\"http://localhost:8080/SRPS/submission/audio?id="
-					+ e.getValue() + "&submissionId=" + submissionId + "\" type=\"audio/ogg\" ></source></audio><br><br>";
+					+ e.getValue() + "&submissionId=" + submissionId + "\"></embed><br><br>";
 
 			return temp;
 

@@ -13,11 +13,11 @@
     <script src="/SRPS/resources/js/scripts.js" type="text/javascript"></script>
 	<style>
 		#main { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px; 
 		}
 		#userDiv{
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
@@ -25,48 +25,49 @@
 	<script></script>
 	<body>
 		<div id="main">
-			<div id="userDiv">
-				<p> this is where user editing controls go. </p>
+			<div id="userDiv" align="center">
+				<h3> Update user details </h3><br>
 				
 				<label for="username">Username</label>
-				<input type="text" value="${user.email}" name="email" id="email" disabled /><br />
+				<input type="text" value="${user.email}" name="email" id="email" disabled /><br>
 					
 				<label for="firstName">First name </label>
-				<input type="text" value="${user.firstName}" name="firstName" id="firstName"/><br />
+				<input type="text" value="${user.firstName}" name="firstName" id="firstName"/><br>
 					
 				<label for="lastName">Last name </label>
-				<input type="text" value="${user.lastName}" name="lastName" id="lastName"/><br />
+				<input type="text" value="${user.lastName}" name="lastName" id="lastName"/><br>
 					
 				<label for="dateOfBirth">Date of birth</label>
-				<input type="text" value="${user.dateOfBirth}" name="dateOfBirth" id="dateOfBirth"/><br /><br />
+				<input type="text" value="${user.dateOfBirth}" name="dateOfBirth" id="dateOfBirth"/><br><br>
 				
-				<label for="disabled">Account Status</label><br />
+				<label for="disabled">Account Status</label><br>
 				<c:choose>
 					<c:when test="${user.disabled}">
-						<input type="radio" name="disabled" id="disabled" value='True' checked>Disable</input><br />
-						<input type="radio" name="disabled" id="disabled" value='False'>Enable</input><br />
+						<input type="radio" name="disabled" id="disabled" value='True' checked>Disable</input><br>
+						<input type="radio" name="disabled" id="disabled" value='False'>Enable</input><br>
 					</c:when>
 					<c:otherwise>
-						<input type="radio" name="disabled" id="disabled" value='True'>Disable</input><br />
-						<input type="radio" name="disabled" id="disabled" value='False' checked>Enable</input><br />
+						<input type="radio" name="disabled" id="disabled" value='True'>Disable</input><br>
+						<input type="radio" name="disabled" id="disabled" value='False' checked>Enable</input><br>
 					</c:otherwise>
-				</c:choose><br />
+				</c:choose><br>
 				
-				<label for="role">Roles</label><br />
+				<label for="role">Roles</label><br>
 				<c:choose>
 					<c:when test="${role=='Admin'}">
-						<input type="radio" name="role" id="role" value='Admin' checked>Admin</input><br />
-						<input type="radio" name="role" id="role" value='User'>User</input><br />
+						<input type="radio" name="role" id="role" value='Admin' checked>Admin</input><br>
+						<input type="radio" name="role" id="role" value='User'>User</input><br>
 					</c:when>
 					<c:otherwise>
-						<input type="radio" name="role" id="role" value='Admin'>Admin</input><br />
-						<input type="radio" name="role" id="role" value='User' checked>User</input><br />
+						<input type="radio" name="role" id="role" value='Admin'>Admin</input><br>
+						<input type="radio" name="role" id="role" value='User' checked>User</input><br>
 					</c:otherwise>
 				</c:choose>
 				<br /><br />
-				<button type="button" id="updateButton" onclick="javascript:validateUserInput1()">Update</button><br /><br />
+				<button type="button" id="updateButton" onclick="javascript:validateUserInput1()">Update</button><br><br>
 				
 				<p id="updateStatus"></p>
+				<br><br><a href="javascript:gotoHomepage()"> Homepage </a>
 			</div>
 		</div> 
 	</body>

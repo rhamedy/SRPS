@@ -17,27 +17,27 @@
 				padding: 5px 5px 5px 5px; 
 		}
 		#adminDetails{
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
 		#users { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
 		#submissions { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
 		#forms { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
 		#footer { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		} 
@@ -100,8 +100,10 @@
 	</script>
 	<body>
 		<div id="main">
-			<div id="adminDetails">
-				<p> admin details goes here. </p>
+			<div id="adminDetails" align="center">
+				<h2>Administration Page (Form Management, User Management, Submission Management) </h2><br>
+				<a href="javascript:logMeOut()">[-Logout-]</a><br><br>
+				<p> Logged in user details </p>
 				
 				<label for="username">Username</label>
 				<input type="text" value="${user.email}" name="email" id="email" disabled /><br />
@@ -120,10 +122,10 @@
 					
 				<p id="updateStatus"></p>
 			</div>
-			<div id="users">
-				<p> list of users goes here. </p>
+			<div id="users" align="center">
+				<h4> List of all system users </h4>
 				
-				<table border="1">
+				<table border="1" cellspacing="0">
 					<thead>
 						<tr>
 							<th>username</th>
@@ -146,12 +148,12 @@
 							</tr>
 						</c:forEach>
 					</tbody>
-				</table> 
+				</table><br>
 			</div>
-			<div id="forms">
-				<p> list of forms goes here. </p>
+			<div id="forms" align="center" cellspacing="0">
+				<h4> List of all blank survey forms </h4>
 				
-				<table border="1">
+				<table border="1" cellspacing="0">
 					<thead>
 						<tr>
 							<th>form name</th>
@@ -166,12 +168,14 @@
 							</tr>
 						</c:forEach>
 					</tbody>
-				</table>
+					<br>
+				</table><br>
+				<a href="javascript:gotoUploadPage()">Upload survey</a><br><br> 
 			</div>
-			<div id="submissions">
-				<p> list of submissions goes here. </p>
+			<div id="submissions" align="center" cellspacing="0">
+				<h4> List of all submissions in the system </h4>
 				
-				<table border="1"> 
+				<table border="1" cellspacing="0"> 
 						<thead>
 							<tr>
 								<th>submission id</th>
@@ -198,10 +202,7 @@
 								</tr>
 							</c:forEach>
 						</tbody>
-					</table>
-			</div>
-			<div id="footer">
-				<p> footer goes here </p>
+					</table><br><br><br> 
 			</div>
 		</div>
 	</body>

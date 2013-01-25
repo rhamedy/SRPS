@@ -7,24 +7,24 @@
 		<title> Survey Retrieval and Processing System </title> 
 		<style>
 			#main { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px; 
 			}
 			
 			#about { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 			}
 			
 			#submissions { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 			}
 			
 			#statistics { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 			}
@@ -35,11 +35,7 @@
 				margin-top: 10px; 
 			} 
 			
-			#footer { 
-				border: 1px solid black; 
-				padding: 5px 5px 5px 5px;
-				margin-top: 10px; 
-			}  
+			 
 		</style>
 		<script type="text/javascript"> 
 		
@@ -92,12 +88,18 @@
 	<body>
 		<div id="main">
 			<div id="about">
-				<p> this is where information about website goes. </p>
+				<h2> Survey Retrieval and Processing System </h2>
+				<br>
+				<h4> Information about Web application </h4><br>
+				<p> This web application provide web services to the an open source mobile application </p>
+				<p> which is used to download surveys within this system, fill the surveys in smartphone</p>
+				<p> and submit the surveys back to the system. </p>
+				<br>
 			</div> 
-			<div id="submissions">
-				<p> this is where list of submissions with public visibility goes. </p>
+			<div id="submissions" alighn="center">
+				<h4> all those submissions that are available for public users </h4><br>
 				
-				<table border="1"> 
+				<table border="1" cellspacing="0"> 
 					<thead>
 						<tr>
 							<th>submission id</th>
@@ -124,26 +126,20 @@
 					</tbody>
 				</table>
 			</div> 
-			<div id="statistics">
-				<p> this is where submissions statistics (charts) goes. </p>
-			</div> 
 			<div id="account">
-				<p> this is where account request and login controls goes. </p>
+				<h4> this is where account request and login controls goes. </h4>
 				
 				<label for="firstName"> First name </label>
-				<input type="text" name="firstName" id="firstName"></input><br />
+				<input type="text" name="firstName" id="firstName"></input><br>
 				
 				<label for="lastName"> Last name </label>
-				<input type="text" name="lastName" id="lastName"></input><br />
+				<input type="text" name="lastName" id="lastName"></input><br>
 				
 				<label for="email"> Email </label>
-				<input type="text" name="email" id="email"></input><br />
+				<input type="text" name="email" id="email"></input><br><br>
 				<p id="accountStatus"></p>
 				
 				<button type="button" onclick="javascript:validateUserInput()"> Submit </button>
-			</div>
-			<div id="footer">
-				<p> this is where page footer goes. </p>
 			</div>
 		</div>
 	</body>

@@ -6,18 +6,40 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title> Upload a file </title> 
 	</head>
+    <script src="/SRPS/resources/js/scripts.js" type="text/javascript"></script>
+	<style>
+		#main { 
+				//border: 1px solid black; 
+				padding: 5px 5px 5px 5px; 
+		}
+		#uploadWidget{
+				//border: 1px solid black; 
+				padding: 5px 5px 5px 5px;
+				margin-top: 10px; 
+		}
+	</style>
 	<body>
-		<h1>Please upload a file</h1>
-		<form method="post" action="http://localhost:8080/SRPS/upload" enctype="multipart/form-data">
-			<input type="file" name="multipartFile" />
-			<input type="file" name="multipartFile2" />
-			<select name="username">
-				<option value="everyone" selected>everyone</option>
-				<c:forEach items="${users}" var="user">
-					<option value="${user}">${user}</option>
-				</c:forEach> 
-			</select>
-			<input type="submit" name="upload"/>
-		</form>
+	<div id="main">
+		<div id="uploadWidget" align="center">
+			<h3>Upload Blank Survey Form (XML file & MapperFile)</h3><br><br>
+			<form method="post" action="http://localhost:8080/SRPS/upload" enctype="multipart/form-data">
+				<label for="multipartFile">File 1</label>
+				<input type="file" id="multipartFile" name="multipartFile" /><br><br>
+				<label for="multipartFile2">File 2</label>
+				<input type="file" id="multipartFile2" name="multipartFile2" /><br><br>
+				<label for="username">Select owner</label>
+				<select name="username" id="username">
+					<option value="everyone" selected>everyone</option>
+					<c:forEach items="${users}" var="user">
+						<option value="${user}">${user}</option>
+					</c:forEach> 
+				</select><br><br>
+				<input type="submit" value="upload" name="upload"/>
+				<br><br>
+				<a href="javascript:gotoHomepage()">Homepage</a><br>
+				<a href="javascript:logMeOut()">Logout</a>
+			//</form>
+		</div>
+	</div>
 	</body>
 </html>

@@ -14,26 +14,26 @@
     
 	<style>
 		#main { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px; 
 		}
 		#userDetails{
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
 		#userForms { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
 		#submissions { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}
 		#footer { 
-				border: 1px solid black; 
+				//border: 1px solid black; 
 				padding: 5px 5px 5px 5px;
 				margin-top: 10px; 
 		}  
@@ -92,29 +92,31 @@
 	</script>
 	<body>
 		<div id="main">
-				<div id="userDetails">
-					<p> User details will go here </p>
+				<div id="userDetails" align="center">
+					<h2>User Page (Form Management, Submission Management) </h2><br>
+					<a href="javascript:logMeOut()">[-Logout-]</a><br>
+					<h4> Logged in user details </h4>
 					
 					<label for="username">Username</label>
-					<input type="text" value="${user.email}" name="email" id="email" disabled /><br />
+					<input type="text" value="${user.email}" name="email" id="email" disabled /><br>
 					
 					<label for="firstName">First name </label>
-					<input type="text" value="${user.firstName}" name="firstName" id="firstName" disabled /><br />
+					<input type="text" value="${user.firstName}" name="firstName" id="firstName" disabled /><br>
 					
 					<label for="lastName">Last name </label>
-					<input type="text" value="${user.lastName}" name="lastName" id="lastName" disabled /><br />
+					<input type="text" value="${user.lastName}" name="lastName" id="lastName" disabled /><br>
 					
 					<label for="dateOfBirth">Date of birth</label>
-					<input type="text" value="${user.dateOfBirth}" name="dateOfBirth" id="dateOfBirth" disabled /><br /><br />
+					<input type="text" value="${user.dateOfBirth}" name="dateOfBirth" id="dateOfBirth" disabled /><br><br>
 					
 					<button type="button" id="editButton" onclick="javascript:enableEdit()">Enable Edit</button>
-					<button type="button" id="updateButton" onclick="javascript:validateUserInput()" disabled>Update</button><br /><br />
+					<button type="button" id="updateButton" onclick="javascript:validateUserInput()" disabled>Update</button><br><br>
 					
 					<p id="updateStatus"></p>
 				</div>
-				<div id="submissions">
-					<p> this is where list of user submissions go </p>
-					<table border="1"> 
+				<div id="submissions" align="center">
+					<h4> survey submissions by current user </h4>
+					<table border="1" cellspacing="0"> 
 						<thead>
 							<tr>
 								<th>submission id</th>
@@ -137,15 +139,16 @@
 									<td>${s.audio}</td>
 									<td>${s.geopoint}</td>
 									<td>${s.submissionDate}</td>
-									<td><a href=""> view </a> | <a href=""> edit </a> | <a href="javascript:deleteSubmission('${s.submissionId}')"> delete </a> | <a href=""> export </a></td>
+									<td><a href="javascript:viewSubmission('${s.submissionId}')"> view </a> | <a href="javascript:deleteSubmission('${s.submissionId}')"> delete </a> | <a href="javascript:alert("not implemented")"> export </a></td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
-				<div id="userForms">
-					<p> list of forms belonging to user </p>
-					<table border="1">
+				<div id="userForms" align="center">
+				    <br><br>
+					<h4> Survey forms belong to user </h4><br>
+					<table border="1" cellspacing="0">
 						<thead>
 							<tr>
 								<th>form name</th>
@@ -161,10 +164,9 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					<br>
+					<a href="javascript:gotoUploadPage()">Upload a survey</a>
 				</div> 
-				<div id="footer">
-					<p> information about footer </p>
-				</div>
 		</div>
 	</body>
 </html>

@@ -141,3 +141,21 @@ function loadContent(htmlContent) {
 	document.getElementById("submissionView").innerHTML = htmlContent; 
 }
 
+
+function gotoHomepage() { 
+	window.location="http://localhost:8080/SRPS/"; 
+}
+
+function gotoUploadPage() { 
+	window.location="http://localhost:8080/SRPS/upload"; 
+}
+
+function goToPublicPage() { 
+	window.location="http://localhost:8080/SRPS/public/home"; 
+}
+
+function logMeOut() { 
+	window.location="http://localhost:8080/SRPS/logout"; 
+}
+
+

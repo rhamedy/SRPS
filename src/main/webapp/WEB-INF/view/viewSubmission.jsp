@@ -13,22 +13,24 @@
     <script src="/SRPS/resources/js/scripts.js" type="text/javascript"></script>
 	<style>
 		#main { 
-				border: 1px solid black; 
-				padding: 5px 5px 5px 5px; 
+				//border: 1px solid black; 
+				padding: 5px 5px 5px 20px; 
 		}
 		#submissionView{
-				border: 1px solid black; 
-				padding: 5px 5px 5px 5px;
+				//border: 1px solid black; 
+				padding: 5px 5px 5px 10px;
 				margin-top: 10px; 
 		}
 	</style>
 	<body>
-		<h1>Content of the submission is as follow; </h1>
-		<br /><br />
+		<h2>Content of the submission is as follow; </h2><br>
+		<br><br>
 		<div id ="main">
 			<div id="submissionView">
 				${htmlContent}
 			</div>
+			<br>
+			<a href="javascript:gotoHomepage()">Homepage</a>
 		</div>
 	</body>
 </html>

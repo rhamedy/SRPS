@@ -1,14 +1,33 @@
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml">
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<style>
+		#login { 
+				//border: 1px solid black; 
+				padding: 5px 5px 5px 5px; 
+		}
+		#loginDiv{
+				//border: 1px solid black; 
+				padding: 5px 5px 5px 5px;
+				margin-top: 10px; 
+		}
+	</style>
 	<body>
 		<div id="login">
-			<div id="loginDiv"> 
+			<div id="loginDiv" align="center">
+				<h2> Survey Retrieval and Processing System </h2>
+				<br><br>
+				<h3> Login using your credentials </h3><br><br>
 		    	<form action="/SRPS/j_spring_security_check" method="POST" id="loginForm">
 			    	<label for="username"> Username</label>
-			        <input id="username" type="text" name="j_username"/><br /> 
+			        <input id="username" type="text" name="j_username"/><br><br> 
 			        <label for="password"> Password</label>
-			        <input id="password" type="password" name="j_password"/><br /> 
+			        <input id="password" type="password" name="j_password"/><br><br> 
 			    </form>
 			    <button style="margin-left: 90px;" onclick="javascript:document.getElementById('loginForm').submit()">Sign in</button><br />
+			    <br><br>
+			    <a href="http://localhost:8080/SRPS/public/home"> to request access to system, visit the public page </a>
 		    </div>
 		</div>
 	</body>

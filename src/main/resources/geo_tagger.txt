@@ -1,0 +1,7 @@
+DeviceId - string - Mobile device identification code - none
+Visibility - boolean - Should this survey be accessible by other users? - none
+Image - image - Photo of a location - none
+Sound - sound - Photo and survey description - none
+Location - geopoint - Survey geographical location - none
+Description - text - Survey description - none
+SurveyDate - date - Survey date - none

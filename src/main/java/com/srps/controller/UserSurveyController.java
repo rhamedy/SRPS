@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +30,6 @@ import com.srps.service.SurveyServices;
 import com.srps.service.UserServices;
 import com.srps.util.CustomMap;
 import com.srps.util.FormUtil;
-import com.srps.util.MailClient;
 
 @Controller
 public class UserSurveyController {
@@ -46,7 +44,7 @@ public class UserSurveyController {
 	public ModelAndView home() {
 
 		ModelAndView mav = new ModelAndView();
-
+		
 		String username = userServices.getCurrentUsername();
 		boolean bool = userServices.isAdmin(username);
 
@@ -100,7 +98,9 @@ public class UserSurveyController {
 
 		System.out.println("formName : " + formName);
 
-		File file = new File("/home/fareen/workspace/forms/" + formName);
+		//File file = new File("/home/fareen/workspace/forms/" + formName);
+		File file = new File("C:\\project\\forms\\" + formName); 
+		
 		FileInputStream fin = new FileInputStream(file);
 		ServletOutputStream out = response.getOutputStream();
 
@@ -416,8 +416,13 @@ public class UserSurveyController {
 			@RequestParam String submissionId, HttpServletResponse response) {
 
 		response.setContentType("image/jpeg");
-		File file = new File("/home/fareen/workspace/submissions/"
-				+ submissionId, id);
+//		File file = new File("/home/fareen/workspace/submissions/"
+//				+ submissionId, id);
+		
+			File file = new File("C:\\project\\submissions\\" 
+					+ submissionId, id);
+		
+		
 		try {
 			InputStream is = new FileInputStream(file);
 			IOUtils.copy(is, response.getOutputStream());
@@ -430,8 +435,12 @@ public class UserSurveyController {
 	public void getAudio(@RequestParam String id,
 			@RequestParam String submissionId, HttpServletResponse response) {
 		
-		response.setContentType("audio/ogg"); 
-		File file = new File("/home/fareen/workspace/submissions/" + submissionId, id); 
+		response.setContentType("audio/3gpp"); 
+//		File file = new File("/home/fareen/workspace/submissions/" + submissionId, id); 
+		
+	
+			File file = new File("C:\\project\\submissions\\" 
+					+ submissionId, id);
 		
 		try { 
 			InputStream is = new FileInputStream(file); 

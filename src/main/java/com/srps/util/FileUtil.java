@@ -27,9 +27,13 @@ public class FileUtil {
 	}
 
 	public static String readMapperFile(Survey survey) {
-		File submissionDir = new File("/home/fareen/workspace/submissions/"
+//		File submissionDir = new File("/home/fareen/workspace/submissions/"
+//				+ survey.getSubmissionId());
+//		File formsDir = new File("/home/fareen/workspace/forms");
+		
+		File submissionDir = new File("C:\\project\\submissions\\"
 				+ survey.getSubmissionId());
-		File formsDir = new File("/home/fareen/workspace/forms");
+		File formsDir = new File("C:\\project\\forms");
 
 		File xmlFile = null;
 		File mapperFile = null;
